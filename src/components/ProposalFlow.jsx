@@ -177,17 +177,19 @@ export default function ProposalFlow() {
     const btnW = btn.offsetWidth || 100;
     const btnH = btn.offsetHeight || 40;
 
-    // Safe area: viewport minus button size minus 20px margin on each side
-    const safeW = window.innerWidth - btnW - 40;
-    const safeH = window.innerHeight - btnH - 40;
+    // Use full screen dimensions as boundary limits
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-    // maxX/maxY are how far the button can translate from its original center position
-    const maxX = Math.max(60, safeW / 2);
-    const maxY = Math.max(60, safeH / 2);
+    // Safe area: restrict mobile translation to 40% width / 30% height to ensure it stays in screen
+    const isMobile = screenWidth < 600;
+    const maxX = isMobile ? Math.max(40, screenWidth * 0.35) : Math.max(60, (screenWidth - btnW) / 2 - 40);
+    const maxY = isMobile ? Math.max(40, screenHeight * 0.28) : Math.max(60, (screenHeight - btnH) / 2 - 80);
 
     // Generate a new position guaranteed to be far from the current one
     let newX, newY, attempts = 0;
     do {
+      // Keep within bounds
       newX = (Math.random() * 2 - 1) * maxX;
       newY = (Math.random() * 2 - 1) * maxY;
       attempts++;
@@ -353,6 +355,7 @@ export default function ProposalFlow() {
                 transition={{ type: "spring", stiffness: 220, damping: 14, mass: 0.4 }}
                 onMouseEnter={dodgeNoButton}
                 onTouchStart={dodgeNoButton}
+                onTouchMove={dodgeNoButton}
                 onClick={dodgeNoButton}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
               >
