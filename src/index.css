@@ -247,9 +247,9 @@ p {
 
 /* Flexbox/Grid options layout (Auto-wrap columns on smaller devices) */
 .options-grid {
-  display: grid;
+  display: grid !important;
   /* Force exactly 2 columns on mobile */
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr !important;
   gap: 1rem;
   margin: 2rem 0;
   width: 100%;
@@ -499,8 +499,8 @@ p {
 
 /* Time Slot Cards */
 .time-slots-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
   gap: 1.2rem;
   width: 100%;
 }
