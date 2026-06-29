@@ -1,4 +1,4 @@
-/* Highly Responsive Modern Premium Design System */
+/* Bulletproof Centering & Device Responsive Design System */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -23,24 +23,31 @@
   padding: 0;
 }
 
+/* Bulletproof vertical/horizontal centering on ALL devices */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: var(--font);
   background-color: var(--background);
   color: var(--text);
-  min-height: 100vh;
-  position: relative;
+  display: grid;
+  place-items: center; /* Absolute center alignment */
   overflow-x: hidden;
-  overflow-y: auto; /* Allows page scrolling if content overflows screen height */
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
+  position: relative;
 }
 
 /* Ambient Background Glow */
 body::before, body::after {
   content: '';
   position: absolute;
-  width: 50vw;
-  height: 50vw;
+  width: 60vw;
+  height: 60vw;
   max-width: 800px;
   max-height: 800px;
   border-radius: 50%;
@@ -71,9 +78,8 @@ body::after {
 
 #root {
   width: 100%;
-  flex: 1;
+  min-height: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem 1.25rem;
@@ -87,14 +93,17 @@ body::after {
   border: 2px solid var(--card-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow), var(--inner-shadow);
-  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
   width: 100%;
   max-width: 650px;
-  margin: auto;
   text-align: center;
   position: relative;
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .glass-container.wide {
@@ -103,7 +112,7 @@ body::after {
 
 /* Fluid Responsive Typography */
 h1 {
-  font-size: clamp(2rem, 8vw, 3.5rem); /* Scales beautifully down to mobile */
+  font-size: clamp(2rem, 8vw, 3.5rem);
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1.2rem;
@@ -111,6 +120,7 @@ h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -1px;
+  width: 100%;
 }
 
 p {
@@ -119,6 +129,7 @@ p {
   line-height: 1.5;
   margin-bottom: 2.2rem;
   font-weight: 400;
+  width: 100%;
 }
 
 /* Responsive Input Field */
@@ -168,6 +179,7 @@ p {
   align-items: center;
   gap: 0.8rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+  width: 100%;
 }
 
 .option-card:hover {
@@ -352,7 +364,6 @@ p {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.5rem);
-  margin: auto;
 }
 
 .table-responsive {
@@ -454,10 +465,10 @@ tr:hover {
 /* Mobile Media Queries adjustments for layout reflow */
 @media (max-width: 600px) {
   .options-grid {
-    grid-template-columns: 1fr; /* Stacks selection cards cleanly on mobile */
+    grid-template-columns: 1fr;
   }
   .btn-container {
-    flex-direction: column; /* Stack Yes/No buttons vertically to prevent overlap */
+    flex-direction: column;
     gap: 1.2rem;
   }
   .btn-yes, .btn-no {
