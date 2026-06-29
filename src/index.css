@@ -1,4 +1,4 @@
-/* Enhanced Modern Premium Design System (Balanced Cinematic Screen Scaling) */
+/* Highly Responsive Modern Premium Design System */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -7,14 +7,14 @@
   --secondary: #ff85a2;
   --accent: #ff0a54;
   --background: #fff0f3;
-  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-bg: rgba(255, 255, 255, 0.65);
   --card-border: rgba(255, 255, 255, 0.85);
   --text: #2b0f1a;
   --text-muted: #6b4d57;
   --shadow: 0 30px 70px rgba(255, 71, 126, 0.15);
   --inner-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.6);
   --font: 'Outfit', sans-serif;
-  --radius: 40px;
+  --radius: 32px;
 }
 
 * {
@@ -28,19 +28,21 @@ body {
   background-color: var(--background);
   color: var(--text);
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: auto; /* Allows page scrolling if content overflows screen height */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Ambient Background Glow */
 body::before, body::after {
   content: '';
   position: absolute;
-  width: 800px;
-  height: 800px;
+  width: 50vw;
+  height: 50vw;
+  max-width: 800px;
+  max-height: 800px;
   border-radius: 50%;
   z-index: -2;
   filter: blur(150px);
@@ -64,20 +66,20 @@ body::after {
 
 @keyframes floatBG {
   0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(80px, 60px) scale(1.2); }
+  100% { transform: translate(50px, 40px) scale(1.1); }
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem 1rem;
+  padding: 2rem 1.25rem;
 }
 
-/* Balanced, elegant Glassmorphism Container */
+/* Fluid responsive glass container */
 .glass-container {
   background: var(--card-bg);
   backdrop-filter: blur(30px);
@@ -85,9 +87,9 @@ body::after {
   border: 2px solid var(--card-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow), var(--inner-shadow);
-  padding: 4.5rem 4rem; /* Balanced padding */
-  width: 95%;
-  max-width: 720px; /* Reduced from 1050px to fit screen nicely */
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem);
+  width: 100%;
+  max-width: 650px;
   margin: auto;
   text-align: center;
   position: relative;
@@ -95,40 +97,39 @@ body::after {
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Wide Container for options selection */
 .glass-container.wide {
-  max-width: 950px; /* Reduced from 1350px for grid view */
+  max-width: 900px;
 }
 
-/* Bold yet Balanced Typography */
+/* Fluid Responsive Typography */
 h1 {
-  font-size: 3.6rem; /* Reduced from 5.2rem to fit in viewport */
+  font-size: clamp(2rem, 8vw, 3.5rem); /* Scales beautifully down to mobile */
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.2;
   margin-bottom: 1.2rem;
   background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 50%, #ff85a2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
 }
 
 p {
   color: var(--text-muted);
-  font-size: 1.45rem; /* Reduced from 2.1rem */
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
   line-height: 1.5;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.2rem;
   font-weight: 400;
 }
 
-/* Balanced Interactive Input Field */
+/* Responsive Input Field */
 .input-field {
   width: 100%;
-  max-width: 500px;
-  padding: 1.2rem 2rem;
+  max-width: 480px;
+  padding: clamp(1rem, 3vw, 1.25rem) clamp(1.5rem, 4vw, 2rem);
   border-radius: 20px;
   border: 2.5px solid rgba(255, 71, 126, 0.15);
   background: rgba(255, 255, 255, 0.85);
-  font-size: 1.45rem;
+  font-size: clamp(1.2rem, 3.5vw, 1.45rem);
   font-weight: 500;
   color: var(--text);
   outline: none;
@@ -143,33 +144,34 @@ p {
   border-color: var(--primary);
   box-shadow: 0 0 0 6px var(--primary-glow);
   background: #ffffff;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
-/* Grid Layout for selections */
+/* Flexbox/Grid options layout (Auto-wrap columns on smaller devices) */
 .options-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.8rem;
-  margin: 3rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+  width: 100%;
 }
 
 .option-card {
   background: rgba(255, 255, 255, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 28px;
-  padding: 2.5rem 1.8rem;
+  border-radius: 24px;
+  padding: clamp(1.8rem, 4vw, 2.5rem) clamp(1.2rem, 3vw, 1.8rem);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
 }
 
 .option-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.02);
   background: rgba(255, 255, 255, 0.85);
   border-color: var(--secondary);
   box-shadow: 0 15px 35px rgba(255, 71, 126, 0.12);
@@ -179,43 +181,43 @@ p {
   background: rgba(255, 240, 243, 0.9);
   border-color: var(--primary);
   box-shadow: 0 15px 30px rgba(255, 71, 126, 0.25);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 /* Icons inside Option Cards */
 .option-emoji {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   transition: transform 0.3s ease;
 }
 
 .option-emoji svg {
-  width: 70px !important; /* Balanced size */
-  height: 70px !important;
+  width: clamp(56px, 10vw, 70px) !important;
+  height: clamp(56px, 10vw, 70px) !important;
 }
 
 .option-card:hover .option-emoji {
-  transform: scale(1.15) rotate(5deg);
+  transform: scale(1.12) rotate(5deg);
 }
 
 .option-label {
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 3vw, 1.35rem);
   color: var(--text);
 }
 
 .option-desc {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: var(--text-muted);
 }
 
-/* Primary Action Button */
+/* Fluid Action Button */
 .btn-primary {
   background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 1.2rem 4rem; /* Balanced padding */
-  font-size: 1.35rem;
+  padding: clamp(1rem, 3vw, 1.25rem) clamp(2.5rem, 8vw, 4.5rem);
+  font-size: clamp(1.15rem, 3vw, 1.3rem);
   font-weight: 800;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -228,12 +230,12 @@ p {
 }
 
 .btn-primary:hover {
-  transform: translateY(-4px) scale(1.03);
+  transform: translateY(-3px) scale(1.02);
   box-shadow: 0 15px 35px rgba(255, 10, 84, 0.5);
 }
 
 .btn-primary:active {
-  transform: translateY(-2px) scale(0.98);
+  transform: translateY(-1px) scale(0.98);
 }
 
 .btn-primary:disabled {
@@ -249,17 +251,25 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem;
-  margin-top: 3rem;
-  min-height: 100px;
+  gap: clamp(1.5rem, 5vw, 2.5rem);
+  margin-top: 2.5rem;
+  min-height: 80px;
   position: relative;
   width: 100%;
 }
 
+.btn-yes, .btn-no {
+  padding: clamp(1rem, 3vw, 1.25rem) clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .btn-yes {
-  padding: 1.3rem 5rem; /* Balanced size */
-  font-size: 1.5rem;
   background: linear-gradient(135deg, #ff0a54, #ff477e);
+  color: white;
+  border: none;
   animation: pulse 2s infinite;
 }
 
@@ -267,11 +277,6 @@ p {
   background: rgba(255, 255, 255, 0.8);
   border: 2px solid rgba(255, 71, 126, 0.15);
   color: var(--text-muted);
-  border-radius: 50px;
-  padding: 1.3rem 5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  cursor: pointer;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
 }
 
@@ -279,23 +284,24 @@ p {
 .datetime-container {
   display: flex;
   flex-direction: column;
-  gap: 2.2rem;
-  margin: 3rem auto;
+  gap: 2rem;
+  margin: 2.5rem auto;
   text-align: left;
-  max-width: 600px;
+  max-width: 500px;
+  width: 100%;
 }
 
 .datetime-group {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
 .datetime-group label {
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 3vw, 1.25rem);
   color: var(--text);
-  padding-left: 0.6rem;
+  padding-left: 0.5rem;
 }
 
 /* Floating Hearts Background */
@@ -315,43 +321,43 @@ p {
     opacity: 0.8;
   }
   50% {
-    transform: translateY(50vh) translateX(40px) rotate(180deg);
+    transform: translateY(50vh) translateX(30px) rotate(180deg);
   }
   100% {
-    transform: translateY(-10vh) translateX(-30px) rotate(360deg);
+    transform: translateY(-10vh) translateX(-20px) rotate(360deg);
     opacity: 0;
   }
 }
 
 /* Screen 1 SVG Heart Icon Scaling */
 .glass-container svg {
-  width: 72px !important;
-  height: 72px !important;
+  width: clamp(60px, 12vw, 75px) !important;
+  height: clamp(60px, 12vw, 75px) !important;
 }
 
 /* Success Badge Icon Scaling */
 .glass-container svg[style*="drop-shadow"] {
-  width: 96px !important;
-  height: 96px !important;
+  width: clamp(80px, 15vw, 100px) !important;
+  height: clamp(80px, 15vw, 100px) !important;
 }
 
 /* Enhanced Dashboard Container */
 .dashboard-container {
-  max-width: 1200px;
-  width: 95%;
+  max-width: 1100px;
+  width: 100%;
   background: var(--card-bg);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 2px solid var(--card-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 4rem;
-  margin: 3rem auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.5rem);
+  margin: auto;
 }
 
 .table-responsive {
   overflow-x: auto;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   border-radius: 24px;
   border: 1px solid rgba(255, 71, 126, 0.1);
   box-shadow: 0 15px 40px rgba(0,0,0,0.02);
@@ -365,16 +371,15 @@ table {
 }
 
 th, td {
-  padding: 1.6rem 2rem;
+  padding: 1.4rem 1.8rem;
   border-bottom: 1.5px solid rgba(255, 71, 126, 0.08);
-  font-size: 1.2rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
 }
 
 th {
   background-color: #ffe5ec;
   color: var(--accent);
   font-weight: 800;
-  font-size: 1.25rem;
   letter-spacing: 0.5px;
 }
 
@@ -386,12 +391,12 @@ tr:hover {
   background: #ff7675;
   color: white;
   border: none;
-  padding: 0.6rem 1.3rem;
-  border-radius: 14px;
+  padding: 0.5rem 1.1rem;
+  border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .delete-btn:hover {
@@ -403,13 +408,13 @@ tr:hover {
 /* Floating Key Trigger */
 .admin-trigger {
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: clamp(20px, 5vw, 40px);
+  right: clamp(20px, 5vw, 40px);
   background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--card-border);
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: clamp(55px, 8vw, 70px);
+  height: clamp(55px, 8vw, 70px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -420,8 +425,8 @@ tr:hover {
 }
 
 .admin-trigger svg {
-  width: 32px !important;
-  height: 32px !important;
+  width: clamp(24px, 4vw, 32px) !important;
+  height: clamp(24px, 4vw, 32px) !important;
 }
 
 .admin-trigger:hover {
@@ -446,32 +451,17 @@ tr:hover {
   }
 }
 
-/* Mobile Media Queries adjustments */
-@media (max-width: 768px) {
-  .glass-container {
-    padding: 3.5rem 2rem;
-  }
-  h1 {
-    font-size: 2.6rem;
-  }
-  p {
-    font-size: 1.2rem;
-  }
+/* Mobile Media Queries adjustments for layout reflow */
+@media (max-width: 600px) {
   .options-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-  .option-card {
-    padding: 2rem;
+    grid-template-columns: 1fr; /* Stacks selection cards cleanly on mobile */
   }
   .btn-container {
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: column; /* Stack Yes/No buttons vertically to prevent overlap */
+    gap: 1.2rem;
   }
-  .btn-no, .btn-yes {
+  .btn-yes, .btn-no {
     width: 100%;
-    max-width: 300px;
-    padding: 1.2rem 4rem;
-    font-size: 1.4rem;
+    max-width: 280px;
   }
 }
