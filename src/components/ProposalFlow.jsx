@@ -87,6 +87,48 @@ const Icons = {
     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10c4.5 0 8-3.5 10-8H2" />
     </svg>
+  ),
+  Sun: () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </svg>
+  ),
+  CloudSun: () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41" />
+      <path d="M15.28 18.28A6 6 0 1 0 7 15H6a4 4 0 0 0 0 8h9.5a3.5 3.5 0 0 0 .78-7" />
+    </svg>
+  ),
+  Sunset: () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 18a5 5 0 0 0-10 0M12 9v4M19 13.5l-1.5-1.5M5 13.5L6.5 12M2 22h20M12 2v3M4.9 6.4l1.4 1.4M19.1 6.4l-1.4 1.4" />
+    </svg>
+  ),
+  Moon: () => (
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  ),
+  HeartMini: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ color: 'var(--primary)', opacity: 0.65 }}>
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+  ),
+  ShieldAlert: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM12 8v4M12 16h.01" />
+    </svg>
+  ),
+  Sparkles: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+      <path d="M12 3v1M12 20v1M3 12h1M20 12h1M5.9 5.9l.7.7M17.4 17.4l.7.7M17.4 6.6l-.7.7M6.6 17.4l-.7.7" />
+    </svg>
+  ),
+  ArrowRight: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+    </svg>
   )
 };
 
@@ -109,7 +151,7 @@ export default function ProposalFlow() {
   const [noEmoji, setNoEmoji] = useState('😢');
   const [hearts, setHearts] = useState([]);
 
-  const noEmojis = ['😢', '🥺', '😭', '💔', '😿', '🙈', '😱', '🏃', '💨', '🫣', '😤', '🤪'];
+  const noEmojis = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
   // Generate floating background hearts
   useEffect(() => {
@@ -264,11 +306,13 @@ export default function ProposalFlow() {
             className="heart"
             style={{
               left: h.left,
-              fontSize: h.fontSize,
-              animationDuration: h.animationDuration
+              width: h.fontSize,
+              height: h.fontSize,
+              animationDuration: h.animationDuration,
+              display: 'block'
             }}
           >
-            ❤️
+            <Icons.HeartMini />
           </span>
         ))}
       </div>
@@ -292,7 +336,7 @@ export default function ProposalFlow() {
                 className="btn-primary btn-yes" 
                 onClick={handleNext}
               >
-                Yes! 😍
+                Yes! <Icons.HeartMini />
               </motion.button>
               <motion.button 
                 ref={noBtnRef}
@@ -307,8 +351,9 @@ export default function ProposalFlow() {
                 onMouseEnter={dodgeNoButton}
                 onTouchStart={dodgeNoButton}
                 onClick={dodgeNoButton}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
               >
-                No {noEmoji}
+                <Icons.ShieldAlert /> No
               </motion.button>
             </div>
           </motion.div>
@@ -341,7 +386,7 @@ export default function ProposalFlow() {
                 onClick={handleNext}
                 disabled={!formData.name.trim()}
               >
-                Continue ✨
+                Continue <Icons.Sparkles />
               </motion.button>
             </div>
           </motion.div>
@@ -381,7 +426,7 @@ export default function ProposalFlow() {
               onClick={handleNext}
               disabled={!formData.location}
             >
-              Select Cuisine ➡️
+              Select Cuisine <Icons.ArrowRight />
             </motion.button>
           </motion.div>
         )}
@@ -420,7 +465,7 @@ export default function ProposalFlow() {
               onClick={handleNext}
               disabled={!formData.food}
             >
-              Select Date & Time 📅
+              Select Date & Time <Icons.ArrowRight />
             </motion.button>
           </motion.div>
         )}
@@ -468,10 +513,10 @@ export default function ProposalFlow() {
           };
 
           const timeSlots = [
-            { id: 'Morning ☀️', label: 'Morning', emoji: '☀️', desc: '8 AM – 12 PM' },
-            { id: 'Afternoon 🌤️', label: 'Afternoon', emoji: '🌤️', desc: '12 PM – 4 PM' },
-            { id: 'Evening 🌅', label: 'Evening', emoji: '🌅', desc: '4 PM – 7 PM' },
-            { id: 'Night 🌙', label: 'Night', emoji: '🌙', desc: '7 PM – 11 PM' },
+            { id: 'Morning', label: 'Morning', emoji: <Icons.Sun />, desc: '8 AM – 12 PM' },
+            { id: 'Afternoon', label: 'Afternoon', emoji: <Icons.CloudSun />, desc: '12 PM – 4 PM' },
+            { id: 'Evening', label: 'Evening', emoji: <Icons.Sunset />, desc: '4 PM – 7 PM' },
+            { id: 'Night', label: 'Night', emoji: <Icons.Moon />, desc: '7 PM – 11 PM' },
           ];
 
           return (
@@ -544,7 +589,7 @@ export default function ProposalFlow() {
               disabled={!formData.date || !formData.time}
               style={{ marginTop: '2.5rem' }}
             >
-              Lock It In! 🔒💕
+              Lock It In! <Icons.ShieldAlert />
             </motion.button>
           </motion.div>
           );
@@ -563,14 +608,14 @@ export default function ProposalFlow() {
             <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
               I am super excited! Our schedule is locked:
               <br />
-              📍 Location: <strong>{formData.location}</strong>
+              Location: <strong>{formData.location}</strong>
               <br />
-              🍔 Cuisine: <strong>{formData.food}</strong>
+              Cuisine: <strong>{formData.food}</strong>
               <br />
-              📅 Time: <strong>{formData.date}</strong> at <strong>{formData.time}</strong>
+              Time: <strong>{formData.date}</strong> at <strong>{formData.time}</strong>
             </p>
             <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
-              <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Response logged successfully. See you soon! 🥰</p>
+              <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Response logged successfully. See you soon!</p>
             </div>
           </motion.div>
         )}
