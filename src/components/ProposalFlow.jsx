@@ -142,6 +142,21 @@ const Icons = {
       <path d="M12 22v-3" />
     </svg>
   ),
+  CoffeeCup: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+      <line x1="6" y1="2" x2="6" y2="4" />
+      <line x1="10" y1="2" x2="10" y2="4" />
+      <line x1="14" y1="2" x2="14" y2="4" />
+    </svg>
+  ),
+  Stars: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v20M2 12h20" />
+      <path d="m19 5-3.5 3.5L12 5l3.5 3.5L19 5zM5 19l3.5-3.5L5 12l3.5 3.5L5 19z" />
+    </svg>
+  ),
   Sun: () => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="4" />
@@ -584,10 +599,12 @@ export default function ProposalFlow() {
           };
 
           const timeSlots = [
-            { id: 'Morning', label: 'Morning', emoji: <Icons.Sun />, desc: '8 AM – 12 PM' },
-            { id: 'Afternoon', label: 'Afternoon', emoji: <Icons.CloudSun />, desc: '12 PM – 4 PM' },
-            { id: 'Evening', label: 'Evening', emoji: <Icons.Sunset />, desc: '4 PM – 7 PM' },
-            { id: 'Night', label: 'Night', emoji: <Icons.Moon />, desc: '7 PM – 11 PM' },
+            { id: 'Breakfast', label: 'Breakfast', emoji: <Icons.CoffeeCup />, desc: '8 AM – 10 AM' },
+            { id: 'Brunch', label: 'Brunch', emoji: <Icons.Sun />, desc: '10 AM – 12 PM' },
+            { id: 'Lunch', label: 'Lunch Time', emoji: <Icons.CloudSun />, desc: '1 PM – 3 PM' },
+            { id: 'LateAfternoon', label: 'Late Afternoon', emoji: <Icons.CoffeeDessert />, desc: '4 PM – 6 PM' },
+            { id: 'Dinner', label: 'Dinner Time', emoji: <Icons.Sunset />, desc: '7 PM – 9 PM' },
+            { id: 'LateNight', label: 'Late Night', emoji: <Icons.Moon />, desc: '10 PM – 12 AM' },
           ];
 
           return (
