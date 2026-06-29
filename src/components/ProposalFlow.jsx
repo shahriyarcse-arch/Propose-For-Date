@@ -250,13 +250,13 @@ export default function ProposalFlow() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    // Strict margins: keep 25px safe distance from any screen edge
-    const minX = 25;
-    const maxX = screenWidth - btnW - 25;
-    const minY = 25;
-    const maxY = screenHeight - btnH - 25;
+    // Framer motion x,y are relative to the button's original position (center-right).
+    // Allow aggressive movement up to 250px, but clamp it based on screen size so it stays visible
+    const maxX = Math.min(window.innerWidth / 2 - btnW/2, 250); 
+    const minX = Math.max(-window.innerWidth / 2 + btnW/2, -250);
+    const maxY = Math.min(window.innerHeight / 2 - btnH/2, 250);
+    const minY = Math.max(-window.innerHeight / 2 + btnH/2, -250);
 
-    // Generate absolute screen coordinate coordinates
     let newX, newY, attempts = 0;
     do {
       newX = minX + Math.random() * (maxX - minX);
@@ -264,7 +264,7 @@ export default function ProposalFlow() {
       attempts++;
     } while (
       isDodged &&
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 140 &&
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 80 &&
       attempts < 30
     );
 
@@ -439,7 +439,10 @@ export default function ProposalFlow() {
                 onPointerOver={dodgeNoButton}
                 onTouchStart={dodgeNoButton}
                 onTouchMove={dodgeNoButton}
-                onClick={dodgeNoButton}
+                onClick={(e) => {
+                  e.preventDefault();
+                  dodgeNoButton();
+                }}
                 style={{ 
                   display: 'inline-flex', 
                   alignItems: 'center', 
