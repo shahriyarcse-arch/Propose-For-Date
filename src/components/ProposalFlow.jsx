@@ -125,11 +125,20 @@ export default function ProposalFlow() {
     const container = btnContainerRef.current;
     const rect = container.getBoundingClientRect();
 
-    const containerWidth = rect.width;
-    // Keep it bound within the card width
-    const maxOffset = Math.min(containerWidth / 2 - 80, 200);
-    const newX = (Math.random() * (maxOffset * 2)) - maxOffset;
-    const newY = (Math.random() * 120) - 60;
+    // Calculate available space inside the glass card
+    const cardWidth = rect.width;
+    const cardHeight = rect.height;
+
+    // Wider random movement range for more playful escape
+    const maxX = Math.min(cardWidth / 2 - 60, 250);
+    const maxY = Math.min(cardHeight / 2 - 30, 150);
+
+    // Ensure it always moves significantly away from current position
+    let newX, newY;
+    do {
+      newX = (Math.random() * 2 - 1) * maxX;
+      newY = (Math.random() * 2 - 1) * maxY;
+    } while (Math.abs(newX - noBtnPos.x) < 80 && Math.abs(newY - noBtnPos.y) < 40);
 
     setNoBtnPos({ x: newX, y: newY });
   };
@@ -139,7 +148,7 @@ export default function ProposalFlow() {
   };
 
   const handleBack = () => {
-    setStep(prev => Math.max(1, prev - 1));
+    setStep(prev => Math.max(2, prev - 1));
   };
 
   const selectOption = (field, value) => {
@@ -216,9 +225,10 @@ export default function ProposalFlow() {
               <motion.button 
                 className="btn-no" 
                 animate={{ x: noBtnPos.x, y: noBtnPos.y }}
-                transition={{ type: "spring", stiffness: 180, damping: 12 }}
+                transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.6 }}
                 onMouseEnter={handleNoHoverOrTouch}
                 onTouchStart={handleNoHoverOrTouch}
+                onClick={handleNoHoverOrTouch}
               >
                 No 😢
               </motion.button>
