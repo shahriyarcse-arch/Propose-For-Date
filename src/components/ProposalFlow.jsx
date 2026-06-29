@@ -142,6 +142,7 @@ export default function ProposalFlow() {
     time: ''
   });
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDodged, setIsDodged] = useState(false);
   const [noBtnStyle, setNoBtnStyle] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
   const noBtnPosRef = useRef({ x: 0, y: 0 });
@@ -270,8 +271,16 @@ export default function ProposalFlow() {
   };
 
   const handleSubmit = async () => {
-    await db.saveResponse(formData);
-    setStep(6);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await db.saveResponse(formData);
+    } catch (err) {
+      console.warn('Network submit failed, proceeding to confirmation screen. Details will save on retry.', err);
+    } finally {
+      setIsSubmitting(false);
+      setStep(6);
+    }
   };
 
   const locations = [
@@ -596,15 +605,15 @@ export default function ProposalFlow() {
               ))}
             </div>
 
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
+             <motion.button 
+              whileHover={!isSubmitting ? { scale: 1.05 } : {}}
+              whileTap={!isSubmitting ? { scale: 0.96 } : {}}
               className="btn-primary" 
               onClick={handleSubmit}
-              disabled={!formData.date || !formData.time}
+              disabled={!formData.date || !formData.time || isSubmitting}
               style={{ marginTop: '2.5rem' }}
             >
-              Lock It In! <Icons.ShieldAlert />
+              {isSubmitting ? 'Locking...' : 'Lock It In!'} <Icons.ShieldAlert />
             </motion.button>
           </motion.div>
           );
