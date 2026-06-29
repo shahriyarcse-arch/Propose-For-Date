@@ -181,8 +181,8 @@ body::after {
   background: rgba(255, 71, 126, 0.08);
   border: none;
   border-radius: 50px;
-  padding: 0.5rem 1.2rem;
-  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  padding: 0.7rem 1.4rem; /* Slightly larger padding */
+  font-size: clamp(1rem, 2.5vw, 1.1rem); /* Slightly larger font size */
   font-weight: 700;
   color: var(--primary);
   cursor: pointer;
@@ -315,8 +315,8 @@ p {
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 13px 32px; /* Restored to slightly larger, premium size */
-  font-size: 1rem;
+  padding: 16px 36px; /* Increased for a more premium, larger feel */
+  font-size: 1.15rem; /* Increased font size */
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -358,8 +358,8 @@ p {
 }
 
 .btn-yes, .btn-no {
-  padding: 13px 32px; /* Restored to slightly larger, premium size */
-  font-size: 1rem;
+  padding: 16px 36px; /* Increased for a more premium, larger feel */
+  font-size: 1.15rem; /* Increased font size */
   border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
