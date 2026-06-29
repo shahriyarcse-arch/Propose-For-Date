@@ -172,19 +172,21 @@ export default function ProposalFlow() {
   return (
     <div style={{ position: 'relative', width: '100%', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {/* Floating Hearts Background */}
-      {hearts.map(h => (
-        <span
-          key={h.id}
-          className="heart"
-          style={{
-            left: h.left,
-            fontSize: h.fontSize,
-            animationDuration: h.animationDuration
-          }}
-        >
-          ❤️
-        </span>
-      ))}
+      <div className="hearts-container">
+        {hearts.map(h => (
+          <span
+            key={h.id}
+            className="heart"
+            style={{
+              left: h.left,
+              fontSize: h.fontSize,
+              animationDuration: h.animationDuration
+            }}
+          >
+            ❤️
+          </span>
+        ))}
+      </div>
 
       {/* Slide Transition Wrapper */}
       <AnimatePresence mode="wait">
