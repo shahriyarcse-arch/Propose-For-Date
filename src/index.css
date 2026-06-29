@@ -247,21 +247,19 @@ p {
 
 /* Flexbox/Grid options layout (Auto-wrap columns on smaller devices) */
 .options-grid {
-  display: grid !important;
-  /* Force exactly 2 columns on mobile */
-  grid-template-columns: 1fr 1fr !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center;
   gap: 1rem;
   margin: 2rem 0;
   width: 100%;
 }
 
-@media (min-width: 500px) {
-  .options-grid {
-    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-  }
-}
-
 .option-card {
+  /* Force exactly 2 columns on mobile by taking 50% minus the gap */
+  flex: 0 0 calc(50% - 0.5rem) !important;
+  width: calc(50% - 0.5rem) !important;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 24px;
@@ -499,19 +497,17 @@ p {
 
 /* Time Slot Cards */
 .time-slots-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 1.2rem;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center;
+  gap: 1rem;
   width: 100%;
 }
 
-@media (min-width: 500px) {
-  .time-slots-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-}
-
 .time-slot-card {
+  flex: 0 0 calc(50% - 0.5rem) !important;
+  width: calc(50% - 0.5rem) !important;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.45);
   border: 2px solid rgba(255, 255, 255, 0.6);
   border-radius: 20px;
@@ -523,6 +519,17 @@ p {
   align-items: center;
   gap: 0.4rem;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.02);
+}
+
+@media (min-width: 600px) {
+  .option-card {
+    flex: 0 0 calc(33.333% - 0.67rem) !important;
+    width: calc(33.333% - 0.67rem) !important;
+  }
+  .time-slot-card {
+    flex: 0 0 calc(33.333% - 0.67rem) !important;
+    width: calc(33.333% - 0.67rem) !important;
+  }
 }
 
 .time-slot-card:hover {
