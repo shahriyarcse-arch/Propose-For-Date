@@ -168,28 +168,31 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  // Core dodge function — allows No button to move ANYWHERE on the screen without going out of bounds
+  // Core dodge function — keeps No button strictly inside the visible viewport
   const dodgeNoButton = useCallback(() => {
     if (!noBtnRef.current) return;
 
     const cur = noBtnPosRef.current;
+    const btn = noBtnRef.current;
+    const btnW = btn.offsetWidth || 100;
+    const btnH = btn.offsetHeight || 40;
 
-    // Use full screen dimensions as boundary limits (relative to its original centered position)
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+    // Safe area: viewport minus button size minus 20px margin on each side
+    const safeW = window.innerWidth - btnW - 40;
+    const safeH = window.innerHeight - btnH - 40;
 
-    // Strict boundary constraints: keep buttons at least 110px away from horizontal edges, 80px from vertical
-    const maxX = Math.max(80, screenWidth / 2 - 110);
-    const maxY = Math.max(80, screenHeight / 2 - 80);
+    // maxX/maxY are how far the button can translate from its original center position
+    const maxX = Math.max(60, safeW / 2);
+    const maxY = Math.max(60, safeH / 2);
 
-    // Generate a new position guaranteed to be far from the current one and within screen bounds
+    // Generate a new position guaranteed to be far from the current one
     let newX, newY, attempts = 0;
     do {
       newX = (Math.random() * 2 - 1) * maxX;
       newY = (Math.random() * 2 - 1) * maxY;
       attempts++;
     } while (
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 140 &&
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 120 &&
       attempts < 30
     );
 
