@@ -174,12 +174,12 @@ export default function ProposalFlow() {
     { id: 'Fuchka & Chotpoti', label: 'Spicy Local Treats', desc: 'Classic Fuchka & Tangy mix', icon: <Icons.LocalSpicy /> }
   ];
 
-  // Motion config — snappy instant transitions
+  // Motion config — clean fade transition with zero sliding or scaling to prevent layout shifting
   const stepMotion = {
-    initial: { opacity: 0, scale: 0.95, y: 20 },
-    animate: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0.95, y: -20 },
-    transition: { type: "spring", stiffness: 500, damping: 35, mass: 0.8 }
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: 0.12, ease: "easeOut" }
   };
 
   return (

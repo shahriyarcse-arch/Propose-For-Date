@@ -25,10 +25,10 @@
 
 html, body {
   width: 100%;
-  height: 100%; /* Force exact 100% viewport height */
+  height: 100dvh; /* Use Dynamic Viewport Height to automatically adjust for mobile address bars */
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent any page-level scrolling and layout shifting */
+  overflow: hidden; /* Prevent page-level scrollbars */
 }
 
 body {
@@ -75,7 +75,7 @@ body::after {
 
 #root {
   width: 100%;
-  height: 100%; /* Match height of body perfectly */
+  height: 100dvh; /* Match Dynamic Viewport Height exactly */
   display: flex;
   justify-content: center;
   align-items: center;
