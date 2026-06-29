@@ -43,7 +43,7 @@ export default function Dashboard({ onBack }) {
   const [responses, setResponses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const CORRECT_PASSCODE = '1234';
+  const CORRECT_PASSCODE = '5040';
 
   const handleLogin = (e) => {
     e.preventDefault();
