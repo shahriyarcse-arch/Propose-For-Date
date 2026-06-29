@@ -300,7 +300,7 @@ export default function ProposalFlow() {
   };
 
   return (
-    <div className="flow-wrapper">
+    <div className={`flow-wrapper ${step === 1 ? 'no-scroll' : ''}`}>
       {/* Floating Hearts Background */}
       <div className="hearts-container">
         {hearts.map(h => (
