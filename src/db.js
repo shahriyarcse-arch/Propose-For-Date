@@ -19,8 +19,13 @@ export const db = {
       throw new Error('Supabase is not configured. Please check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.');
     }
 
+    // Only send valid database columns, filtering out internal UI states (like _calMonth, _calYear)
     const newResponse = {
-      ...data,
+      name: data.name || '',
+      location: data.location || '',
+      food: data.food || '',
+      date: data.date || '',
+      time: data.time || '',
       timestamp: new Date().toISOString(),
     };
 
