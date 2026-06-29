@@ -300,14 +300,15 @@ export default function ProposalFlow() {
         clientY = e.changedTouches[0].clientY;
       }
 
-      // Strict boundary check: is cursor/touch inside the button rectangle?
-      const isInside =
-        clientX >= rect.left &&
-        clientX <= rect.right &&
-        clientY >= rect.top &&
-        clientY <= rect.bottom;
+      // Add proximity padding so button dodges BEFORE finger reaches it (essential for mobile)
+      const proximityPad = 40;
+      const isNearby =
+        clientX >= rect.left - proximityPad &&
+        clientX <= rect.right + proximityPad &&
+        clientY >= rect.top - proximityPad &&
+        clientY <= rect.bottom + proximityPad;
 
-      if (isInside) {
+      if (isNearby) {
         // Prevent scroll on mobile during touch interaction
         if (e.cancelable) {
           e.preventDefault();
