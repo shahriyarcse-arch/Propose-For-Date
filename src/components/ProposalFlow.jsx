@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../db';
 
@@ -100,11 +100,16 @@ export default function ProposalFlow() {
     time: ''
   });
   
-  // Track No button coordinates and styling (scale, rotation)
-  const [noBtnPos, setNoBtnPos] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
+  // No button dodge system — uses refs to avoid stale closures
+  const [noBtnStyle, setNoBtnStyle] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
+  const noBtnPosRef = useRef({ x: 0, y: 0 });
   const btnContainerRef = useRef(null);
   const noBtnRef = useRef(null);
+  const dodgeCount = useRef(0);
+  const [noEmoji, setNoEmoji] = useState('😢');
   const [hearts, setHearts] = useState([]);
+
+  const noEmojis = ['😢', '🥺', '😭', '💔', '😿', '🙈', '😱', '🏃', '💨', '🫣', '😤', '🤪'];
 
   // Generate floating background hearts
   useEffect(() => {
@@ -121,88 +126,70 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleNoDodge = (clientX, clientY) => {
+  // Core dodge function — reads position from ref (never stale)
+  const dodgeNoButton = useCallback(() => {
     if (!noBtnRef.current || !btnContainerRef.current) return;
 
-    const noBtn = noBtnRef.current;
-    const btnRect = noBtn.getBoundingClientRect();
-    const container = btnContainerRef.current;
-    const containerRect = container.getBoundingClientRect();
+    const containerRect = btnContainerRef.current.getBoundingClientRect();
+    const cur = noBtnPosRef.current;
 
-    // Find the center of the No button
-    const btnCenterX = btnRect.left + btnRect.width / 2;
-    const btnCenterY = btnRect.top + btnRect.height / 2;
+    // Calculate bounds
+    const maxX = Math.min(containerRect.width / 2 - 50, 260);
+    const maxY = 180;
 
-    // Calculate distance from cursor to No button center
-    const dx = clientX - btnCenterX;
-    const dy = clientY - btnCenterY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    // Generate a new position guaranteed to be far from the current one
+    let newX, newY, attempts = 0;
+    do {
+      newX = (Math.random() * 2 - 1) * maxX;
+      newY = (Math.random() * 2 - 1) * maxY;
+      attempts++;
+    } while (
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 100 &&
+      attempts < 20
+    );
 
-    // Proximity threshold: dodge if cursor is within 100px of the button center
-    if (distance < 100) {
-      const maxX = Math.min(containerRect.width / 2 - 60, 240);
-      const maxY = Math.min(containerRect.height / 2 + 100, 160);
+    // Update ref immediately (no stale closure)
+    noBtnPosRef.current = { x: newX, y: newY };
+    dodgeCount.current += 1;
 
-      // Dodge direction is opposite to the cursor's approach direction
-      const angle = Math.atan2(dy, dx);
-      // Push it away by 120px to 180px dynamically
-      const pushDist = 120 + Math.random() * 60;
-      
-      let targetX = noBtnPos.x - Math.cos(angle) * pushDist;
-      let targetY = noBtnPos.y - Math.sin(angle) * pushDist;
+    // Playful rotation and scale wobble
+    const rot = (Math.random() - 0.5) * 40;
+    const scl = 0.8 + Math.random() * 0.35;
 
-      // Keep it within bounding limits
-      if (Math.abs(targetX) > maxX) targetX = Math.sign(targetX) * maxX * 0.9;
-      if (Math.abs(targetY) > maxY) targetY = Math.sign(targetY) * maxY * 0.9;
+    setNoBtnStyle({ x: newX, y: newY, rotate: rot, scale: scl });
 
-      // Random playful rotation and bounce scale effect
-      const randomRotate = (Math.random() * 30 - 15) + (Math.sign(dx) * 15);
-      const randomScale = 0.85 + Math.random() * 0.25; // Wobbles between 0.85 and 1.1
+    // Cycle through funny emojis
+    setNoEmoji(noEmojis[dodgeCount.current % noEmojis.length]);
+  }, []);
 
-      setNoBtnPos({
-        x: targetX,
-        y: targetY,
-        rotate: randomRotate,
-        scale: randomScale
-      });
-    }
-  };
-
-  // Listen to mousemove globally on step 1 to trigger proximity-based dodge
+  // Proximity detection: mouse within 80px of No button triggers dodge
   useEffect(() => {
     if (step !== 1) return;
 
-    const handleMouseMove = (e) => {
-      handleNoDodge(e.clientX, e.clientY);
-    };
+    const onPointerMove = (e) => {
+      if (!noBtnRef.current) return;
 
-    const handleTouchMove = (e) => {
-      if (e.touches && e.touches[0]) {
-        handleNoDodge(e.touches[0].clientX, e.touches[0].clientY);
+      const rect = noBtnRef.current.getBoundingClientRect();
+      const btnCX = rect.left + rect.width / 2;
+      const btnCY = rect.top + rect.height / 2;
+
+      const clientX = e.clientX ?? (e.touches?.[0]?.clientX ?? 0);
+      const clientY = e.clientY ?? (e.touches?.[0]?.clientY ?? 0);
+
+      const dist = Math.sqrt((clientX - btnCX) ** 2 + (clientY - btnCY) ** 2);
+
+      if (dist < 80) {
+        dodgeNoButton();
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('mousemove', onPointerMove);
+      window.removeEventListener('touchmove', onPointerMove);
     };
-  }, [step, noBtnPos]);
-
-  // Fallback: Dodge when cursor directly touches/enters or clicks the button
-  const handleNoFallbackTrigger = (e) => {
-    const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-    
-    // Simulate cursor being right at the center of the button to force a dodge
-    if (clientX === 0 && clientY === 0 && noBtnRef.current) {
-      const rect = noBtnRef.current.getBoundingClientRect();
-      handleNoDodge(rect.left + rect.width / 2 + 5, rect.top + rect.height / 2 + 5);
-    } else {
-      handleNoDodge(clientX, clientY);
-    }
-  };
+  }, [step, dodgeNoButton]);
 
   const handleNext = () => {
     setStep(prev => prev + 1);
@@ -287,17 +274,17 @@ export default function ProposalFlow() {
                 ref={noBtnRef}
                 className="btn-no" 
                 animate={{ 
-                  x: noBtnPos.x, 
-                  y: noBtnPos.y, 
-                  rotate: noBtnPos.rotate, 
-                  scale: noBtnPos.scale 
+                  x: noBtnStyle.x, 
+                  y: noBtnStyle.y, 
+                  rotate: noBtnStyle.rotate, 
+                  scale: noBtnStyle.scale 
                 }}
-                transition={{ type: "spring", stiffness: 150, damping: 11, mass: 0.5 }}
-                onMouseEnter={handleNoFallbackTrigger}
-                onTouchStart={handleNoFallbackTrigger}
-                onClick={handleNoFallbackTrigger}
+                transition={{ type: "spring", stiffness: 220, damping: 14, mass: 0.4 }}
+                onMouseEnter={dodgeNoButton}
+                onTouchStart={dodgeNoButton}
+                onClick={dodgeNoButton}
               >
-                No 😢
+                No {noEmoji}
               </motion.button>
             </div>
           </motion.div>
