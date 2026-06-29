@@ -100,9 +100,10 @@ export default function ProposalFlow() {
     time: ''
   });
   
-  // State to track No button coordinates
-  const [noBtnPos, setNoBtnPos] = useState({ x: 0, y: 0 });
+  // Track No button coordinates and styling (scale, rotation)
+  const [noBtnPos, setNoBtnPos] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
   const btnContainerRef = useRef(null);
+  const noBtnRef = useRef(null);
   const [hearts, setHearts] = useState([]);
 
   // Generate floating background hearts
@@ -120,27 +121,87 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleNoHoverOrTouch = () => {
-    if (!btnContainerRef.current) return;
+  const handleNoDodge = (clientX, clientY) => {
+    if (!noBtnRef.current || !btnContainerRef.current) return;
+
+    const noBtn = noBtnRef.current;
+    const btnRect = noBtn.getBoundingClientRect();
     const container = btnContainerRef.current;
-    const rect = container.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-    // Calculate available space inside the glass card
-    const cardWidth = rect.width;
-    const cardHeight = rect.height;
+    // Find the center of the No button
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
 
-    // Wider random movement range for more playful escape
-    const maxX = Math.min(cardWidth / 2 - 60, 250);
-    const maxY = Math.min(cardHeight / 2 - 30, 150);
+    // Calculate distance from cursor to No button center
+    const dx = clientX - btnCenterX;
+    const dy = clientY - btnCenterY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Ensure it always moves significantly away from current position
-    let newX, newY;
-    do {
-      newX = (Math.random() * 2 - 1) * maxX;
-      newY = (Math.random() * 2 - 1) * maxY;
-    } while (Math.abs(newX - noBtnPos.x) < 80 && Math.abs(newY - noBtnPos.y) < 40);
+    // Proximity threshold: dodge if cursor is within 100px of the button center
+    if (distance < 100) {
+      const maxX = Math.min(containerRect.width / 2 - 60, 240);
+      const maxY = Math.min(containerRect.height / 2 + 100, 160);
 
-    setNoBtnPos({ x: newX, y: newY });
+      // Dodge direction is opposite to the cursor's approach direction
+      const angle = Math.atan2(dy, dx);
+      // Push it away by 120px to 180px dynamically
+      const pushDist = 120 + Math.random() * 60;
+      
+      let targetX = noBtnPos.x - Math.cos(angle) * pushDist;
+      let targetY = noBtnPos.y - Math.sin(angle) * pushDist;
+
+      // Keep it within bounding limits
+      if (Math.abs(targetX) > maxX) targetX = Math.sign(targetX) * maxX * 0.9;
+      if (Math.abs(targetY) > maxY) targetY = Math.sign(targetY) * maxY * 0.9;
+
+      // Random playful rotation and bounce scale effect
+      const randomRotate = (Math.random() * 30 - 15) + (Math.sign(dx) * 15);
+      const randomScale = 0.85 + Math.random() * 0.25; // Wobbles between 0.85 and 1.1
+
+      setNoBtnPos({
+        x: targetX,
+        y: targetY,
+        rotate: randomRotate,
+        scale: randomScale
+      });
+    }
+  };
+
+  // Listen to mousemove globally on step 1 to trigger proximity-based dodge
+  useEffect(() => {
+    if (step !== 1) return;
+
+    const handleMouseMove = (e) => {
+      handleNoDodge(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        handleNoDodge(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [step, noBtnPos]);
+
+  // Fallback: Dodge when cursor directly touches/enters or clicks the button
+  const handleNoFallbackTrigger = (e) => {
+    const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    
+    // Simulate cursor being right at the center of the button to force a dodge
+    if (clientX === 0 && clientY === 0 && noBtnRef.current) {
+      const rect = noBtnRef.current.getBoundingClientRect();
+      handleNoDodge(rect.left + rect.width / 2 + 5, rect.top + rect.height / 2 + 5);
+    } else {
+      handleNoDodge(clientX, clientY);
+    }
   };
 
   const handleNext = () => {
@@ -223,12 +284,18 @@ export default function ProposalFlow() {
                 Yes! 😍
               </motion.button>
               <motion.button 
+                ref={noBtnRef}
                 className="btn-no" 
-                animate={{ x: noBtnPos.x, y: noBtnPos.y }}
-                transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.6 }}
-                onMouseEnter={handleNoHoverOrTouch}
-                onTouchStart={handleNoHoverOrTouch}
-                onClick={handleNoHoverOrTouch}
+                animate={{ 
+                  x: noBtnPos.x, 
+                  y: noBtnPos.y, 
+                  rotate: noBtnPos.rotate, 
+                  scale: noBtnPos.scale 
+                }}
+                transition={{ type: "spring", stiffness: 150, damping: 11, mass: 0.5 }}
+                onMouseEnter={handleNoFallbackTrigger}
+                onTouchStart={handleNoFallbackTrigger}
+                onClick={handleNoFallbackTrigger}
               >
                 No 😢
               </motion.button>
