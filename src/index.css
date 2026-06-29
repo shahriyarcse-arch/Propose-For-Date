@@ -25,19 +25,18 @@
 
 html, body {
   width: 100%;
+  height: 100%; /* Force exact 100% viewport height */
   margin: 0;
   padding: 0;
+  overflow: hidden; /* Prevent any page-level scrolling and layout shifting */
 }
 
 body {
   font-family: var(--font);
   background-color: var(--background);
   color: var(--text);
-  overflow-x: hidden;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Set min-height to 100vh directly */
 }
 
 /* Ambient Background Glow */
@@ -76,22 +75,25 @@ body::after {
 
 #root {
   width: 100%;
-  min-height: 100vh; /* Match viewport height exactly */
+  height: 100%; /* Match height of body perfectly */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem 1.25rem;
   position: relative;
 }
 
 .flow-wrapper, .dashboard-wrapper {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
+  overflow-y: auto; /* Let wrapper scroll if contents exceed height */
+  padding: 2rem 1.25rem;
 }
+
 
 
 /* Floating Hearts Container to prevent scrollbar jittering */
