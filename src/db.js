@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Environment variables for Supabase database.
-// We fallback to local storage if they are not provided, ensuring zero-setup out of the box.
+// Falls back to local storage automatically if keys are missing or Supabase is inactive/down.
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
@@ -10,92 +10,104 @@ if (supabaseUrl && supabaseAnonKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseAnonKey);
   } catch (error) {
-    console.error('Failed to initialize Supabase client:', error);
+    console.warn('Failed to initialize Supabase client:', error);
   }
 }
 
 const LOCAL_STORAGE_KEY = 'date_proposal_responses';
+const SUPABASE_TIMEOUT_MS = 3000; // 3 second timeout — if Supabase doesn't respond, use local
+
+// Helper: Race a promise against a timeout
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Supabase request timed out')), ms)
+    )
+  ]);
+}
 
 export const db = {
-  // Save a new response
+  // ─── Save a new response ─────────────────────────────────
   async saveResponse(data) {
     const newResponse = {
       ...data,
       timestamp: new Date().toISOString(),
     };
 
+    // Always save to localStorage first (instant, guaranteed backup)
+    const localData = this.getLocalResponses();
+    const localItem = { ...newResponse, id: Date.now().toString() };
+    localData.push(localItem);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localData));
+
+    // Then try Supabase (non-blocking, with timeout)
     if (supabase) {
       try {
-        const { data: inserted, error } = await supabase
-          .from('responses')
-          .insert([newResponse])
-          .select();
-        
+        const { data: inserted, error } = await withTimeout(
+          supabase.from('responses').insert([newResponse]).select(),
+          SUPABASE_TIMEOUT_MS
+        );
         if (error) throw error;
-        if (inserted && inserted.length > 0) {
-          return inserted[0];
-        }
+        if (inserted && inserted.length > 0) return inserted[0];
       } catch (error) {
-        console.warn('Supabase insert failed. Saving to local storage instead:', error);
+        console.warn('Supabase unavailable. Response saved to localStorage:', error.message);
       }
     }
 
-    // Fallback to local storage
-    const localData = this.getLocalResponses();
-    const item = { ...newResponse, id: Date.now().toString() };
-    localData.push(item);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localData));
-    return item;
+    return localItem;
   },
 
-  // Get all responses
+  // ─── Get all responses ───────────────────────────────────
   async getResponses() {
     if (supabase) {
       try {
-        const { data: fetched, error } = await supabase
-          .from('responses')
-          .select('*')
-          .order('timestamp', { ascending: false });
-
+        const { data: fetched, error } = await withTimeout(
+          supabase.from('responses').select('*').order('timestamp', { ascending: false }),
+          SUPABASE_TIMEOUT_MS
+        );
         if (error) throw error;
         if (fetched) return fetched;
       } catch (error) {
-        console.warn('Supabase fetch failed. Loading local responses instead:', error);
+        console.warn('Supabase unavailable. Loading localStorage responses:', error.message);
       }
     }
 
-    // Fallback to local storage
-    return this.getLocalResponses().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    // Fallback: always returns data from localStorage
+    return this.getLocalResponses().sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
   },
 
-  // Helper: Get local storage responses
+  // ─── Get local storage responses ─────────────────────────
   getLocalResponses() {
-    const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    try {
+      const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
   },
 
-  // Clear a response by ID
+  // ─── Delete a response by ID ─────────────────────────────
   async deleteResponse(id) {
-    if (supabase) {
-      try {
-        // If it's a numeric timestamp ID, it was created locally. Skip Supabase deletion for it.
-        const isLocalOnly = !isNaN(id) && id.length < 15;
-        if (!isLocalOnly) {
-          const { error } = await supabase
-            .from('responses')
-            .delete()
-            .eq('id', id);
-          if (error) throw error;
-        }
-      } catch (error) {
-        console.warn('Supabase delete failed. Deleting locally:', error);
-      }
-    }
-
-    // Fallback/Local storage delete
+    // Always delete from localStorage
     const localData = this.getLocalResponses();
     const updatedLocal = localData.filter(item => item.id !== id);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedLocal));
+
+    // Try Supabase delete (non-blocking, with timeout)
+    if (supabase) {
+      try {
+        await withTimeout(
+          supabase.from('responses').delete().eq('id', id),
+          SUPABASE_TIMEOUT_MS
+        );
+      } catch (error) {
+        console.warn('Supabase delete unavailable. Deleted from localStorage only:', error.message);
+      }
+    }
+
     return true;
   }
 };
