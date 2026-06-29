@@ -529,6 +529,11 @@ p {
   font-size: clamp(1.8rem, 5vw, 2.4rem);
 }
 
+.time-slot-emoji svg {
+  width: clamp(35px, 7vw, 45px) !important;
+  height: clamp(35px, 7vw, 45px) !important;
+}
+
 .time-slot-label {
   font-weight: 800;
   font-size: clamp(1rem, 2.8vw, 1.15rem);
