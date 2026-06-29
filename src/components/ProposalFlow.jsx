@@ -138,6 +138,10 @@ export default function ProposalFlow() {
     setStep(prev => prev + 1);
   };
 
+  const handleBack = () => {
+    setStep(prev => Math.max(1, prev - 1));
+  };
+
   const selectOption = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -161,12 +165,12 @@ export default function ProposalFlow() {
     { id: 'Fuchka & Chotpoti', label: 'Spicy Local Treats', desc: 'Classic Fuchka & Tangy mix', icon: <Icons.LocalSpicy /> }
   ];
 
-  // Motion config for slide animation transitions
+  // Motion config — snappy instant transitions
   const stepMotion = {
-    initial: { opacity: 0, scale: 0.92, y: 30 },
+    initial: { opacity: 0, scale: 0.95, y: 20 },
     animate: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0.92, y: -30 },
-    transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.5 }
+    exit: { opacity: 0, scale: 0.95, y: -20 },
+    transition: { type: "spring", stiffness: 500, damping: 35, mass: 0.8 }
   };
 
   return (
@@ -225,6 +229,7 @@ export default function ProposalFlow() {
         {/* Screen 2: Enter Name */}
         {step === 2 && (
           <motion.div key="step2" {...stepMotion} className="glass-container">
+            <button className="btn-back" onClick={handleBack}>← Back</button>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.User />
             </div>
@@ -257,6 +262,7 @@ export default function ProposalFlow() {
         {/* Screen 3: Choose Location */}
         {step === 3 && (
           <motion.div key="step3" {...stepMotion} className="glass-container wide">
+            <button className="btn-back" onClick={handleBack}>← Back</button>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.LocationPin />
             </div>
@@ -295,6 +301,7 @@ export default function ProposalFlow() {
         {/* Screen 4: Choose Cuisine */}
         {step === 4 && (
           <motion.div key="step4" {...stepMotion} className="glass-container wide">
+            <button className="btn-back" onClick={handleBack}>← Back</button>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.FoodFork />
             </div>
@@ -381,6 +388,7 @@ export default function ProposalFlow() {
 
           return (
           <motion.div key="step5" {...stepMotion} className="glass-container wide">
+            <button className="btn-back" onClick={handleBack}>← Back</button>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.Calendar />
             </div>
