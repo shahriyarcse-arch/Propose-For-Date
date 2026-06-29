@@ -328,29 +328,165 @@ p {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
 }
 
-/* Date/time pickers style */
-.datetime-container {
+/* ═══════════════════════════════════════════════════
+   Custom Modern Calendar & Time Slot Styles
+   ═══════════════════════════════════════════════════ */
+.custom-calendar {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 0 auto 1rem;
+  box-shadow: 0 10px 30px rgba(255, 71, 126, 0.06);
+}
+
+.cal-header {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin: 2.5rem auto;
-  text-align: left;
-  max-width: 500px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.cal-month-title {
+  font-weight: 800;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+  color: var(--text);
+}
+
+.cal-nav-btn {
+  background: rgba(255, 71, 126, 0.08);
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.cal-nav-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: scale(1.1);
+}
+
+.cal-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.5rem;
+}
+
+.cal-day-name {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  color: var(--text-muted);
+  padding: 0.4rem 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2.8vw, 1.1rem);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.cal-cell:not(.cal-empty):not(.cal-disabled):hover {
+  background: rgba(255, 71, 126, 0.12);
+}
+
+.cal-empty {
+  cursor: default;
+}
+
+.cal-today {
+  border: 2px solid var(--primary);
+  font-weight: 800;
+}
+
+.cal-selected {
+  background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
+  color: white !important;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(255, 10, 84, 0.35);
+}
+
+.cal-disabled {
+  color: #d4c4c8;
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Time Slot Cards */
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.2rem;
   width: 100%;
 }
 
-.datetime-group {
+.time-slot-card {
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: clamp(1.2rem, 3vw, 1.6rem) clamp(0.8rem, 2vw, 1.2rem);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.02);
 }
 
-.datetime-group label {
-  font-weight: 800;
-  font-size: clamp(1.1rem, 3vw, 1.25rem);
-  color: var(--text);
-  padding-left: 0.5rem;
+.time-slot-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--secondary);
+  box-shadow: 0 10px 25px rgba(255, 71, 126, 0.12);
 }
+
+.time-slot-card.selected {
+  background: rgba(255, 240, 243, 0.95);
+  border-color: var(--primary);
+  box-shadow: 0 10px 25px rgba(255, 71, 126, 0.3);
+}
+
+.time-slot-emoji {
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+}
+
+.time-slot-label {
+  font-weight: 800;
+  font-size: clamp(1rem, 2.8vw, 1.15rem);
+  color: var(--text);
+}
+
+.time-slot-desc {
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 
 /* Screen 1 SVG Heart Icon Scaling */
 .glass-container svg {

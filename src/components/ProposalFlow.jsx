@@ -331,36 +331,113 @@ export default function ProposalFlow() {
         )}
 
         {/* Screen 5: Choose Date and Time */}
-        {step === 5 && (
-          <motion.div key="step5" {...stepMotion} className="glass-container">
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
+        {step === 5 && (() => {
+          const today = new Date();
+          const currentMonth = formData._calMonth ?? today.getMonth();
+          const currentYear = formData._calYear ?? today.getFullYear();
+          const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+          const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
+          const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+          const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+          const prevMonth = () => {
+            let m = currentMonth - 1, y = currentYear;
+            if (m < 0) { m = 11; y--; }
+            setFormData(p => ({ ...p, _calMonth: m, _calYear: y }));
+          };
+          const nextMonth = () => {
+            let m = currentMonth + 1, y = currentYear;
+            if (m > 11) { m = 0; y++; }
+            setFormData(p => ({ ...p, _calMonth: m, _calYear: y }));
+          };
+
+          const selectDate = (day) => {
+            const mm = String(currentMonth + 1).padStart(2, '0');
+            const dd = String(day).padStart(2, '0');
+            const dateStr = `${currentYear}-${mm}-${dd}`;
+            selectOption('date', dateStr);
+          };
+
+          const isToday = (day) => {
+            return day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+          };
+          const isPast = (day) => {
+            const d = new Date(currentYear, currentMonth, day);
+            const t = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            return d < t;
+          };
+          const isSelected = (day) => {
+            const mm = String(currentMonth + 1).padStart(2, '0');
+            const dd = String(day).padStart(2, '0');
+            return formData.date === `${currentYear}-${mm}-${dd}`;
+          };
+
+          const timeSlots = [
+            { id: 'Morning ☀️', label: 'Morning', emoji: '☀️', desc: '8 AM – 12 PM' },
+            { id: 'Afternoon 🌤️', label: 'Afternoon', emoji: '🌤️', desc: '12 PM – 4 PM' },
+            { id: 'Evening 🌅', label: 'Evening', emoji: '🌅', desc: '4 PM – 7 PM' },
+            { id: 'Night 🌙', label: 'Night', emoji: '🌙', desc: '7 PM – 11 PM' },
+          ];
+
+          return (
+          <motion.div key="step5" {...stepMotion} className="glass-container wide">
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.Calendar />
             </div>
             <h1>When are you free?</h1>
-            <p>Schedule a perfect date and time for us</p>
+            <p>Pick a perfect date and time for us</p>
 
-            <div className="datetime-container">
-              <div className="datetime-group">
-                <label>Select Date:</label>
-                <input 
-                  type="date" 
-                  className="input-field" 
-                  min={new Date().toISOString().split('T')[0]}
-                  value={formData.date}
-                  onChange={(e) => selectOption('date', e.target.value)}
-                />
+            {/* Custom Calendar */}
+            <div className="custom-calendar">
+              <div className="cal-header">
+                <button className="cal-nav-btn" onClick={prevMonth}>‹</button>
+                <span className="cal-month-title">{monthNames[currentMonth]} {currentYear}</span>
+                <button className="cal-nav-btn" onClick={nextMonth}>›</button>
               </div>
+              <div className="cal-days-header">
+                {dayNames.map(d => <div key={d} className="cal-day-name">{d}</div>)}
+              </div>
+              <div className="cal-grid">
+                {Array.from({ length: firstDayOfWeek }).map((_, i) => (
+                  <div key={`empty-${i}`} className="cal-cell cal-empty"></div>
+                ))}
+                {Array.from({ length: daysInMonth }).map((_, i) => {
+                  const day = i + 1;
+                  const past = isPast(day);
+                  return (
+                    <motion.div
+                      key={day}
+                      whileHover={!past ? { scale: 1.15 } : {}}
+                      whileTap={!past ? { scale: 0.9 } : {}}
+                      className={`cal-cell ${isSelected(day) ? 'cal-selected' : ''} ${isToday(day) ? 'cal-today' : ''} ${past ? 'cal-disabled' : ''}`}
+                      onClick={() => !past && selectDate(day)}
+                    >
+                      {day}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
 
-              <div className="datetime-group">
-                <label>Select Time or Slot:</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Afternoon, 6:00 PM, Sunset" 
-                  className="input-field" 
-                  value={formData.time}
-                  onChange={(e) => selectOption('time', e.target.value)}
-                />
-              </div>
+            {/* Time Slot Cards */}
+            <h2 style={{ fontSize: 'clamp(1.3rem, 4vw, 1.6rem)', fontWeight: 800, color: 'var(--text)', margin: '2.5rem 0 1.5rem', width: '100%', textAlign: 'left' }}>Pick a Time Slot</h2>
+            <div className="time-slots-grid">
+              {timeSlots.map((slot, idx) => (
+                <motion.div
+                  key={slot.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.08 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  className={`time-slot-card ${formData.time === slot.id ? 'selected' : ''}`}
+                  onClick={() => selectOption('time', slot.id)}
+                >
+                  <span className="time-slot-emoji">{slot.emoji}</span>
+                  <span className="time-slot-label">{slot.label}</span>
+                  <span className="time-slot-desc">{slot.desc}</span>
+                </motion.div>
+              ))}
             </div>
 
             <motion.button 
@@ -368,12 +445,14 @@ export default function ProposalFlow() {
               whileTap={{ scale: 0.96 }}
               className="btn-primary" 
               onClick={handleSubmit}
-              disabled={!formData.date || !formData.time.trim()}
+              disabled={!formData.date || !formData.time}
+              style={{ marginTop: '2.5rem' }}
             >
-              Lock It In! 🔒❤️
+              Lock It In! 🔒💕
             </motion.button>
           </motion.div>
-        )}
+          );
+        })()}
 
         {/* Screen 6: Confirmation Screen */}
         {step === 6 && (
