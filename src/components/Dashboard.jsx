@@ -87,7 +87,7 @@ export default function Dashboard({ onBack }) {
   };
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
+    <div className="dashboard-wrapper">
       <AnimatePresence mode="wait">
         
         {!isAuthenticated ? (

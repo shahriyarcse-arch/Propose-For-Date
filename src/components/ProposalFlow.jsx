@@ -183,7 +183,7 @@ export default function ProposalFlow() {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="flow-wrapper">
       {/* Floating Hearts Background */}
       <div className="hearts-container">
         {hearts.map(h => (

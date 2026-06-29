@@ -1,5 +1,5 @@
-/* Highly Responsive, Centered & Jitter-Free Design System */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+/* Highly Responsive, Centered & Jitter-Free Design System */
 
 :root {
   --primary: #ff477e;
@@ -35,8 +35,10 @@ body {
   background-color: var(--background);
   color: var(--text);
   overflow-x: hidden;
-  /* Always show scrollbar track on desktop to prevent layout shifting, or hide it if not needed */
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 /* Ambient Background Glow */
@@ -75,15 +77,23 @@ body::after {
 
 #root {
   width: 100%;
-  min-height: 100vh;
-  /* Handles vertical alignment beautifully on mobile Safari/Chrome address bar changes */
-  min-height: -webkit-fill-available; 
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2.5rem 1.25rem;
+  padding: 2rem 1.25rem;
   position: relative;
 }
+
+.flow-wrapper, .dashboard-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
 
 /* Floating Hearts Container to prevent scrollbar jittering */
 .hearts-container {
