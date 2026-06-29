@@ -248,11 +248,17 @@ p {
 /* Flexbox/Grid options layout (Auto-wrap columns on smaller devices) */
 .options-grid {
   display: grid;
-  /* Use smaller minmax to force at least 2 columns on mobile, matching desktop feel */
-  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  /* Force exactly 2 columns on mobile */
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin: 2rem 0;
   width: 100%;
+}
+
+@media (min-width: 500px) {
+  .options-grid {
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  }
 }
 
 .option-card {
@@ -494,9 +500,15 @@ p {
 /* Time Slot Cards */
 .time-slots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.2rem;
   width: 100%;
+}
+
+@media (min-width: 500px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
 }
 
 .time-slot-card {
