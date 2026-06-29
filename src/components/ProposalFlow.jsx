@@ -181,20 +181,19 @@ export default function ProposalFlow() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    // Safe area: restrict mobile translation to 40% width / 30% height to ensure it stays in screen
+    // Safe area: limit maximum translation to avoid any viewport overflow (22% on mobile, 30% on desktop)
     const isMobile = screenWidth < 600;
-    const maxX = isMobile ? Math.max(40, screenWidth * 0.35) : Math.max(60, (screenWidth - btnW) / 2 - 40);
-    const maxY = isMobile ? Math.max(40, screenHeight * 0.28) : Math.max(60, (screenHeight - btnH) / 2 - 80);
+    const maxX = isMobile ? Math.max(30, screenWidth * 0.28) : Math.max(50, (screenWidth - btnW) / 2 - 80);
+    const maxY = isMobile ? Math.max(30, screenHeight * 0.22) : Math.max(50, (screenHeight - btnH) / 2 - 120);
 
     // Generate a new position guaranteed to be far from the current one
     let newX, newY, attempts = 0;
     do {
-      // Keep within bounds
       newX = (Math.random() * 2 - 1) * maxX;
       newY = (Math.random() * 2 - 1) * maxY;
       attempts++;
     } while (
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 120 &&
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 100 &&
       attempts < 30
     );
 
@@ -223,9 +222,9 @@ export default function ProposalFlow() {
       const btnCX = rect.left + rect.width / 2;
       const btnCY = rect.top + rect.height / 2;
 
-      // Correctly extract coordinates for mouse or touch events
-      let clientX = 0;
-      let clientY = 0;
+      // Extract coordinates: check touch events but fallback to e.clientX if empty (fixes mobile mode mouse hover)
+      let clientX = e.clientX;
+      let clientY = e.clientY;
 
       if (e.type === 'touchmove' || e.type === 'touchstart') {
         if (e.touches && e.touches.length > 0) {
@@ -235,10 +234,11 @@ export default function ProposalFlow() {
           clientX = e.changedTouches[0].clientX;
           clientY = e.changedTouches[0].clientY;
         }
-      } else {
-        clientX = e.clientX;
-        clientY = e.clientY;
       }
+
+      // Fallback in case they are undefined/0 in emulator hover states
+      if (clientX === undefined || clientX === null) clientX = e.clientX || 0;
+      if (clientY === undefined || clientY === null) clientY = e.clientY || 0;
 
       const dist = Math.sqrt((clientX - btnCX) ** 2 + (clientY - btnCY) ** 2);
 
