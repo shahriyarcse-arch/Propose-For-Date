@@ -126,26 +126,29 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  // Core dodge function — reads position from ref (never stale)
+  // Core dodge function — allows No button to move ANYWHERE on the entire screen
   const dodgeNoButton = useCallback(() => {
-    if (!noBtnRef.current || !btnContainerRef.current) return;
+    if (!noBtnRef.current) return;
 
-    const containerRect = btnContainerRef.current.getBoundingClientRect();
     const cur = noBtnPosRef.current;
 
-    // Calculate bounds
-    const maxX = Math.min(containerRect.width / 2 - 50, 260);
-    const maxY = 180;
+    // Use full screen dimensions as boundary limits (relative to its original centered position)
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-    // Generate a new position guaranteed to be far from the current one
+    // Boundary constraints: allow translating to almost the edges of the screen
+    const maxX = Math.max(100, screenWidth / 2 - 90);
+    const maxY = Math.max(100, screenHeight / 2 - 50);
+
+    // Generate a new position guaranteed to be far from the current one and within screen bounds
     let newX, newY, attempts = 0;
     do {
       newX = (Math.random() * 2 - 1) * maxX;
       newY = (Math.random() * 2 - 1) * maxY;
       attempts++;
     } while (
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 100 &&
-      attempts < 20
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 150 &&
+      attempts < 30
     );
 
     // Update ref immediately (no stale closure)
@@ -153,8 +156,8 @@ export default function ProposalFlow() {
     dodgeCount.current += 1;
 
     // Playful rotation and scale wobble
-    const rot = (Math.random() - 0.5) * 40;
-    const scl = 0.8 + Math.random() * 0.35;
+    const rot = (Math.random() - 0.5) * 60;
+    const scl = 0.8 + Math.random() * 0.4;
 
     setNoBtnStyle({ x: newX, y: newY, rotate: rot, scale: scl });
 
@@ -162,7 +165,7 @@ export default function ProposalFlow() {
     setNoEmoji(noEmojis[dodgeCount.current % noEmojis.length]);
   }, []);
 
-  // Proximity detection: mouse within 80px of No button triggers dodge
+  // Proximity detection: mouse/touch within 130px of No button triggers dodge
   useEffect(() => {
     if (step !== 1) return;
 
@@ -178,7 +181,8 @@ export default function ProposalFlow() {
 
       const dist = Math.sqrt((clientX - btnCX) ** 2 + (clientY - btnCY) ** 2);
 
-      if (dist < 80) {
+      // 130px proximity threshold (button radius is ~90px, so this triggers well before touch/click)
+      if (dist < 130) {
         dodgeNoButton();
       }
     };
