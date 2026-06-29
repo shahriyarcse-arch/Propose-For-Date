@@ -211,7 +211,7 @@ export default function ProposalFlow() {
     setNoEmoji(noEmojis[dodgeCount.current % noEmojis.length]);
   }, []);
 
-  // Proximity detection: mouse/touch within 120px of No button triggers dodge
+  // Proximity detection: triggers dodge ONLY when pointer is fully on top of the No button
   useEffect(() => {
     if (step !== 1) return;
 
@@ -219,32 +219,28 @@ export default function ProposalFlow() {
       if (!noBtnRef.current) return;
 
       const rect = noBtnRef.current.getBoundingClientRect();
-      const btnCX = rect.left + rect.width / 2;
-      const btnCY = rect.top + rect.height / 2;
 
-      // Extract coordinates: check touch events but fallback to e.clientX if empty (fixes mobile mode mouse hover)
+      // Extract coordinates: works for mouse, touch, and emulators
       let clientX = e.clientX;
       let clientY = e.clientY;
 
-      if (e.type === 'touchmove' || e.type === 'touchstart') {
-        if (e.touches && e.touches.length > 0) {
-          clientX = e.touches[0].clientX;
-          clientY = e.touches[0].clientY;
-        } else if (e.changedTouches && e.changedTouches.length > 0) {
-          clientX = e.changedTouches[0].clientX;
-          clientY = e.changedTouches[0].clientY;
-        }
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
       }
 
-      // Fallback in case they are undefined/0 in emulator hover states
-      if (clientX === undefined || clientX === null) clientX = e.clientX || 0;
-      if (clientY === undefined || clientY === null) clientY = e.clientY || 0;
+      // Strict boundary check: is cursor/touch inside the button rectangle?
+      const isInside =
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom;
 
-      const dist = Math.sqrt((clientX - btnCX) ** 2 + (clientY - btnCY) ** 2);
-
-      // 120px proximity threshold to trigger well before click/touch
-      if (dist < 120) {
-        // Prevent default touch behavior (scrolling/rubber-banding) on mobile step 1 during dodge
+      if (isInside) {
+        // Prevent scroll on mobile during touch interaction
         if (e.cancelable) {
           e.preventDefault();
         }
@@ -252,11 +248,12 @@ export default function ProposalFlow() {
       }
     };
 
-    window.addEventListener('mousemove', onPointerMove);
+    // Use pointermove to capture mouse, touch, and emulator hovers uniformly
+    window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('touchmove', onPointerMove, { passive: false });
     window.addEventListener('touchstart', onPointerMove, { passive: false });
     return () => {
-      window.removeEventListener('mousemove', onPointerMove);
+      window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('touchmove', onPointerMove);
       window.removeEventListener('touchstart', onPointerMove);
     };
