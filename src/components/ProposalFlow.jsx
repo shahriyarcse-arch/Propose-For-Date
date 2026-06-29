@@ -247,15 +247,15 @@ export default function ProposalFlow() {
     const btnW = btn.offsetWidth || 100;
     const btnH = btn.offsetHeight || 40;
 
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-
-    // Framer motion x,y are relative to the button's original position (center-right).
-    // Allow aggressive movement up to 250px, but clamp it based on screen size so it stays visible
-    const maxX = Math.min(window.innerWidth / 2 - btnW/2, 250); 
-    const minX = Math.max(-window.innerWidth / 2 + btnW/2, -250);
-    const maxY = Math.min(window.innerHeight / 2 - btnH/2, 250);
-    const minY = Math.max(-window.innerHeight / 2 + btnH/2, -250);
+    // Keep movement constrained to a safe box around its original position
+    const isMobile = window.innerWidth < 500;
+    const maxMoveX = isMobile ? 100 : 200;
+    const maxMoveY = isMobile ? 120 : 200;
+    
+    const minX = -maxMoveX;
+    const maxX = maxMoveX;
+    const minY = -maxMoveY;
+    const maxY = maxMoveY;
 
     let newX, newY, attempts = 0;
     do {
@@ -439,22 +439,13 @@ export default function ProposalFlow() {
                 onPointerOver={dodgeNoButton}
                 onTouchStart={dodgeNoButton}
                 onTouchMove={dodgeNoButton}
-                onClick={(e) => {
-                  e.preventDefault();
-                  dodgeNoButton();
-                }}
+                onClick={dodgeNoButton}
                 style={{ 
                   display: 'inline-flex', 
                   alignItems: 'center', 
                   gap: '0.4rem',
-                  ...(isDodged ? {
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    margin: 0,
-                    zIndex: 999,
-                    pointerEvents: 'auto'
-                  } : {})
+                  zIndex: 999,
+                  pointerEvents: 'auto'
                 }}
               >
                 <Icons.ShieldAlert /> No
