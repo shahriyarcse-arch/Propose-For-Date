@@ -649,11 +649,16 @@ tr:hover {
     grid-template-columns: 1fr;
   }
   .btn-container {
-    flex-direction: column;
-    gap: 1.2rem;
+    flex-direction: row; /* Force side-by-side alignment */
+    gap: 1rem;
+    flex-wrap: nowrap;
+    width: 100%;
   }
   .btn-yes, .btn-no {
-    width: 100%;
-    max-width: 280px;
+    flex: 1; /* Equal width buttons */
+    max-width: 180px;
+    padding: 0.9rem 1.5rem; /* Reduced padding on mobile so they fit beautifully */
+    font-size: 1.15rem;
+    text-align: center;
   }
 }
