@@ -23,7 +23,9 @@ const Icons = {
   ),
   FoodFork: () => (
     <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+      <path d="M7 2v20" />
+      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
     </svg>
   ),
   Calendar: () => (
@@ -114,6 +116,30 @@ const Icons = {
   LocalSpicy: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10c4.5 0 8-3.5 10-8H2" />
+    </svg>
+  ),
+  Burger: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+    </svg>
+  ),
+  Biryani: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M22 15c0-1.7-1.3-3-3-3H5c-1.7 0-3 1.3-3 3" />
+      <path d="M12 12c-1.6 0-3-1.4-3-3 0-2.5 3-6 3-6s3 3.5 3 6c0 1.6-1.4 3-3 3z" />
+      <path d="M6 10c-1.1 0-2-1-2-2 0-1.7 2-4 2-4s2 2.3 2 4c0 1-1 2-2 2z" />
+      <path d="M18 10c-1.1 0-2-1-2-2 0-1.7 2-4 2-4s2 2.3 2 4c0 1-1 2-2 2z" />
+    </svg>
+  ),
+  IceCream: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 11v8a5 5 0 0 0 10 0v-8" />
+      <path d="M12 3a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V8a5 5 0 0 0-5-5Z" />
+      <path d="M12 22v-3" />
     </svg>
   ),
   Sun: () => (
@@ -327,7 +353,10 @@ export default function ProposalFlow() {
     { id: 'Coffee & Dessert', label: 'Coffee & Dessert', desc: 'Sweets and drinks', icon: <Icons.CoffeeDessert /> },
     { id: 'Pizza & Pasta', label: 'Pizza & Pasta', desc: 'Italian favorites', icon: <Icons.PizzaPasta /> },
     { id: 'Sushi & Asian', label: 'Sushi & Asian', desc: 'Dumplings, noodles or sushi', icon: <Icons.SushiAsian /> },
-    { id: 'Fuchka & Chotpoti', label: 'Fuchka & Street Food', desc: 'Spicy local delicacies', icon: <Icons.LocalSpicy /> }
+    { id: 'Fuchka & Chotpoti', label: 'Fuchka & Street Food', desc: 'Spicy local delicacies', icon: <Icons.LocalSpicy /> },
+    { id: 'Burger & Fries', label: 'Burger & Fries', desc: 'Classic fast food', icon: <Icons.Burger /> },
+    { id: 'Biryani', label: 'Biryani', desc: 'Deshi favorite', icon: <Icons.Biryani /> },
+    { id: 'Ice Cream', label: 'Ice Cream', desc: 'Cold and sweet', icon: <Icons.IceCream /> }
   ];
 
   // Motion config — clean fade transition with zero sliding or scaling to prevent layout shifting
