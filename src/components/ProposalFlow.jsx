@@ -275,17 +275,17 @@ export default function ProposalFlow() {
   };
 
   const locations = [
-    { id: 'Cafe', label: 'Cozy Cafe', desc: 'Sip coffee & talk life', icon: <Icons.Cafe /> },
-    { id: 'Restaurant', label: 'Fancy Dinner', desc: 'Premium culinary vibe', icon: <Icons.Restaurant /> },
-    { id: 'Park', label: 'Scenic Park', desc: 'Walk under autumn leaves', icon: <Icons.Park /> },
-    { id: 'Rooftop', label: 'Rooftop Lounge', desc: 'Sunset & open sky views', icon: <Icons.Rooftop /> }
+    { id: 'Cafe', label: 'Cozy Cafe', desc: 'Grab a coffee and chat', icon: <Icons.Cafe /> },
+    { id: 'Restaurant', label: 'Nice Dinner', desc: 'Go out for dinner', icon: <Icons.Restaurant /> },
+    { id: 'Park', label: 'Scenic Park', desc: 'Take a walk in the park', icon: <Icons.Park /> },
+    { id: 'Rooftop', label: 'Rooftop', desc: 'Hang out with a view', icon: <Icons.Rooftop /> }
   ];
 
   const foods = [
-    { id: 'Coffee & Dessert', label: 'Coffee & Cakes', desc: 'Sweet, rich desserts', icon: <Icons.CoffeeDessert /> },
-    { id: 'Pizza & Pasta', label: 'Italian Special', desc: 'Pizza slice & pasta bowl', icon: <Icons.PizzaPasta /> },
-    { id: 'Sushi & Asian', label: 'Sushi & Asian', desc: 'Savory & oriental rolls', icon: <Icons.SushiAsian /> },
-    { id: 'Fuchka & Chotpoti', label: 'Spicy Local Treats', desc: 'Classic Fuchka & Tangy mix', icon: <Icons.LocalSpicy /> }
+    { id: 'Coffee & Dessert', label: 'Coffee & Dessert', desc: 'Sweets and drinks', icon: <Icons.CoffeeDessert /> },
+    { id: 'Pizza & Pasta', label: 'Pizza & Pasta', desc: 'Italian favorites', icon: <Icons.PizzaPasta /> },
+    { id: 'Sushi & Asian', label: 'Sushi & Asian', desc: 'Dumplings, noodles or sushi', icon: <Icons.SushiAsian /> },
+    { id: 'Fuchka & Chotpoti', label: 'Fuchka & Street Food', desc: 'Spicy local delicacies', icon: <Icons.LocalSpicy /> }
   ];
 
   // Motion config — clean fade transition with zero sliding or scaling to prevent layout shifting
@@ -323,11 +323,11 @@ export default function ProposalFlow() {
         {/* Screen 1: Will you go on a date with me? */}
         {step === 1 && (
           <motion.div key="step1" {...stepMotion} className="glass-container">
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
+             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.Heart />
             </div>
-            <h1>Will you go on a date with me?</h1>
-            <p>Let's write a beautiful chapter together. Say yes!</p>
+            <h1>Are you free to go out with me sometime?</h1>
+            <p>Select your answer below:</p>
             
             <div className="btn-container" ref={btnContainerRef}>
               <motion.button 
@@ -362,12 +362,12 @@ export default function ProposalFlow() {
         {/* Screen 2: Enter Name */}
         {step === 2 && (
           <motion.div key="step2" {...stepMotion} className="glass-container">
-            <button className="btn-back" onClick={handleBack}>← Back</button>
+             <button className="btn-back" onClick={handleBack}>← Back</button>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.User />
             </div>
-            <h1>I knew you'd say Yes!</h1>
-            <p>Before we outline our details, tell me your lovely name:</p>
+            <h1>Awesome! Let's plan it out.</h1>
+            <p>What is your name?</p>
             
             <input 
               type="text" 
@@ -399,8 +399,8 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.LocationPin />
             </div>
-            <h1>Where are we going?</h1>
-            <p>Select your favorite atmosphere for our date</p>
+            <h1>Where should we go?</h1>
+            <p>Pick a location you prefer:</p>
             
             <div className="options-grid">
               {locations.map((loc, idx) => (
@@ -438,8 +438,8 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.FoodFork />
             </div>
-            <h1>What are we eating?</h1>
-            <p>Pick your preferred cuisine or delicacy</p>
+            <h1>What should we eat?</h1>
+            <p>Choose your favorite food option:</p>
             
             <div className="options-grid">
               {foods.map((food, idx) => (
@@ -526,7 +526,7 @@ export default function ProposalFlow() {
               <Icons.Calendar />
             </div>
             <h1>When are you free?</h1>
-            <p>Pick a perfect date and time for us</p>
+            <p>Select a date and time slot:</p>
 
             {/* Custom Calendar */}
             <div className="custom-calendar">
@@ -603,19 +603,19 @@ export default function ProposalFlow() {
             </div>
             <h1>It's a Date!</h1>
             <p style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '1.5rem' }}>
-              Yay, {formData.name}!
+              Awesome, {formData.name}!
             </p>
             <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
-              I am super excited! Our schedule is locked:
+              Our schedule is set:
               <br />
               Location: <strong>{formData.location}</strong>
               <br />
-              Cuisine: <strong>{formData.food}</strong>
+              Food: <strong>{formData.food}</strong>
               <br />
               Time: <strong>{formData.date}</strong> at <strong>{formData.time}</strong>
             </p>
             <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
-              <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Response logged successfully. See you soon!</p>
+              <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Response saved. Talk to you soon!</p>
             </div>
           </motion.div>
         )}
