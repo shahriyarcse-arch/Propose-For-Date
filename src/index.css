@@ -534,14 +534,14 @@ p {
 }
 
 
-/* Screen 1 SVG Heart Icon Scaling */
-.glass-container svg {
+/* Screen 1 SVG Heart Icon Scaling (only for top header icon) */
+.glass-container > div:first-of-type svg:not(.btn-yes svg):not(.btn-no svg) {
   width: clamp(60px, 12vw, 75px) !important;
   height: clamp(60px, 12vw, 75px) !important;
 }
 
 /* Success Badge Icon Scaling */
-.glass-container svg[style*="drop-shadow"] {
+.glass-container > div:first-of-type svg[style*="drop-shadow"] {
   width: clamp(80px, 15vw, 100px) !important;
   height: clamp(80px, 15vw, 100px) !important;
 }
