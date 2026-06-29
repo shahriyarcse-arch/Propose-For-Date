@@ -267,7 +267,24 @@ export default function ProposalFlow() {
   };
 
   const selectOption = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+
+      // Auto-advance: location or food selected → go to next step after brief delay
+      if (field === 'location' || field === 'food') {
+        setTimeout(() => setStep(s => s + 1), 400);
+      }
+
+      // Auto-submit: both date AND time filled on step 5
+      if (field === 'date' && updated.time) {
+        setTimeout(() => handleSubmit(), 500);
+      }
+      if (field === 'time' && updated.date) {
+        setTimeout(() => handleSubmit(), 500);
+      }
+
+      return updated;
+    });
   };
 
   const handleSubmit = async () => {
@@ -442,16 +459,6 @@ export default function ProposalFlow() {
                 </motion.div>
               ))}
             </div>
-
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
-              className="btn-primary" 
-              onClick={handleNext}
-              disabled={!formData.location}
-            >
-              Select Cuisine <Icons.ArrowRight />
-            </motion.button>
           </motion.div>
         )}
 
@@ -481,16 +488,6 @@ export default function ProposalFlow() {
                 </motion.div>
               ))}
             </div>
-
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
-              className="btn-primary" 
-              onClick={handleNext}
-              disabled={!formData.food}
-            >
-              Select Date & Time <Icons.ArrowRight />
-            </motion.button>
           </motion.div>
         )}
 
@@ -604,17 +601,6 @@ export default function ProposalFlow() {
                 </motion.div>
               ))}
             </div>
-
-             <motion.button 
-              whileHover={!isSubmitting ? { scale: 1.05 } : {}}
-              whileTap={!isSubmitting ? { scale: 0.96 } : {}}
-              className="btn-primary" 
-              onClick={handleSubmit}
-              disabled={!formData.date || !formData.time || isSubmitting}
-              style={{ marginTop: '2.5rem' }}
-            >
-              {isSubmitting ? 'Locking...' : 'Lock It In!'} <Icons.ShieldAlert />
-            </motion.button>
           </motion.div>
           );
         })()}
