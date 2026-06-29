@@ -1,0 +1,477 @@
+/* Enhanced Modern Premium Design System (Massive Cinematic Screen Scaling) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #ff477e;
+  --primary-glow: rgba(255, 71, 126, 0.4);
+  --secondary: #ff85a2;
+  --accent: #ff0a54;
+  --background: #fff0f3;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-border: rgba(255, 255, 255, 0.85);
+  --text: #2b0f1a;
+  --text-muted: #6b4d57;
+  --shadow: 0 40px 90px rgba(255, 71, 126, 0.18);
+  --inner-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.7);
+  --font: 'Outfit', sans-serif;
+  --radius: 48px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background-color: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ambient Background Glow */
+body::before, body::after {
+  content: '';
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  border-radius: 50%;
+  z-index: -2;
+  filter: blur(180px);
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+body::before {
+  background: radial-gradient(circle, #ffb3c6 0%, rgba(255,179,198,0) 70%);
+  top: -15%;
+  left: -15%;
+  animation: floatBG 25s infinite alternate ease-in-out;
+}
+
+body::after {
+  background: radial-gradient(circle, #ffc6ff 0%, rgba(255,198,255,0) 70%);
+  bottom: -15%;
+  right: -15%;
+  animation: floatBG 30s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatBG {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(120px, 90px) scale(1.25); }
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+}
+
+/* Humongous Glassmorphism Container */
+.glass-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+  border: 3px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow), var(--inner-shadow);
+  padding: 7rem 6rem; /* Substantial padding */
+  width: 95%;
+  max-width: 1050px; /* Massive scale up from 850px */
+  margin: auto;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Wide Container for options selection */
+.glass-container.wide {
+  max-width: 1350px; /* Massive scale up from 1050px */
+}
+
+/* Large, Cinematic Typography */
+h1 {
+  font-size: 5.2rem; /* Massive heading */
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 50%, #ff85a2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -2px;
+}
+
+p {
+  color: var(--text-muted);
+  font-size: 2.1rem; /* Highly legible subtext */
+  line-height: 1.6;
+  margin-bottom: 4rem;
+  font-weight: 400;
+}
+
+/* Huge Interactive Input Field */
+.input-field {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.8rem 3rem;
+  border-radius: 30px;
+  border: 3px solid rgba(255, 71, 126, 0.15);
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 2.2rem; /* Huge input size */
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+  font-family: var(--font);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 3.5rem;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255, 71, 126, 0.04);
+}
+
+.input-field:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 8px var(--primary-glow);
+  background: #ffffff;
+  transform: translateY(-4px);
+}
+
+/* Massive Grid Layout for selections */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem; /* Huge gap */
+  margin: 4.5rem 0;
+}
+
+.option-card {
+  background: rgba(255, 255, 255, 0.4);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 38px;
+  padding: 4rem 3rem; /* Generous option spacing */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.02);
+}
+
+.option-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--secondary);
+  box-shadow: 0 25px 60px rgba(255, 71, 126, 0.15);
+}
+
+.option-card.selected {
+  background: rgba(255, 240, 243, 0.9);
+  border-color: var(--primary);
+  box-shadow: 0 25px 50px rgba(255, 71, 126, 0.25);
+  transform: translateY(-6px);
+}
+
+/* Scaled up Icons inside Option Cards */
+.option-emoji {
+  margin-bottom: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.option-emoji svg {
+  width: 90px !important; /* Scaled up from 68px */
+  height: 90px !important;
+}
+
+.option-card:hover .option-emoji {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.option-label {
+  font-weight: 800;
+  font-size: 2rem; /* Massive label */
+  color: var(--text);
+}
+
+.option-desc {
+  font-size: 1.4rem; /* Highly descriptive sublabel */
+  color: var(--text-muted);
+}
+
+/* Huge Primary Action Button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: white;
+  border: none;
+  border-radius: 80px;
+  padding: 1.8rem 6rem; /* Huge padding */
+  font-size: 2rem; /* Large text */
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 40px rgba(255, 10, 84, 0.35);
+  font-family: var(--font);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 25px 60px rgba(255, 10, 84, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(-3px) scale(0.98);
+}
+
+.btn-primary:disabled {
+  background: #e0d5d7;
+  color: #a89aa0;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Proposal Screen Buttons Layout */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  margin-top: 4.5rem;
+  min-height: 150px;
+  position: relative;
+  width: 100%;
+}
+
+.btn-yes {
+  padding: 2rem 8rem; /* Massive size */
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #ff0a54, #ff477e);
+  animation: pulse 2s infinite;
+}
+
+.btn-no {
+  background: rgba(255, 255, 255, 0.8);
+  border: 3px solid rgba(255, 71, 126, 0.15);
+  color: var(--text-muted);
+  border-radius: 80px;
+  padding: 2rem 8rem; /* Match yes button */
+  font-size: 2.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* Date/time pickers style */
+.datetime-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin: 4rem auto;
+  text-align: left;
+  max-width: 800px;
+}
+
+.datetime-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.datetime-group label {
+  font-weight: 800;
+  font-size: 1.8rem; /* Larger labels */
+  color: var(--text);
+  padding-left: 0.8rem;
+}
+
+/* Floating Hearts Background */
+.heart {
+  position: absolute;
+  color: var(--primary);
+  opacity: 0.55;
+  font-size: 3rem; /* Huge background elements */
+  animation: floatUp 7s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(110vh) translateX(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(50vh) translateX(50px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(-10vh) translateX(-40px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Screen 1 SVG Heart Icon Scaling */
+.glass-container svg {
+  width: 90px !important;
+  height: 90px !important;
+}
+
+/* Success Badge Icon Scaling */
+.glass-container svg[style*="drop-shadow"] {
+  width: 120px !important;
+  height: 120px !important;
+}
+
+/* Enhanced Dashboard Container */
+.dashboard-container {
+  max-width: 1500px; /* Extremely wide dashboard */
+  width: 95%;
+  background: var(--card-bg);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 3px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 6rem;
+  margin: 4rem auto;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 3.5rem;
+  border-radius: 32px;
+  border: 2px solid rgba(255, 71, 126, 0.1);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.02);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+th, td {
+  padding: 2.2rem 2.5rem;
+  border-bottom: 1.5px solid rgba(255, 71, 126, 0.08);
+  font-size: 1.6rem; /* Huge table cells */
+}
+
+th {
+  background-color: #ffe5ec;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1.7rem;
+  letter-spacing: 0.5px;
+}
+
+tr:hover {
+  background-color: rgba(255, 240, 243, 0.6);
+}
+
+.delete-btn {
+  background: #ff7675;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.3rem;
+}
+
+.delete-btn:hover {
+  background: #d63031;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(214, 48, 49, 0.35);
+}
+
+/* Floating Key Trigger */
+.admin-trigger {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 3px solid var(--card-border);
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 20px 45px rgba(255, 71, 126, 0.25);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+}
+
+.admin-trigger svg {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.admin-trigger:hover {
+  transform: rotate(45deg) scale(1.15);
+  background: white;
+  box-shadow: 0 25px 55px rgba(255, 71, 126, 0.35);
+}
+
+/* Animations scale values */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 15px 40px rgba(255, 10, 84, 0.35);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 22px 60px rgba(255, 10, 84, 0.65);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 15px 40px rgba(255, 10, 84, 0.35);
+  }
+}
+
+/* Mobile Media Queries adjustments */
+@media (max-width: 992px) {
+  .glass-container {
+    padding: 4.5rem 3rem;
+  }
+  h1 {
+    font-size: 3.5rem;
+  }
+  p {
+    font-size: 1.6rem;
+  }
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .option-card {
+    padding: 2.5rem;
+  }
+  .btn-container {
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+  .btn-no, .btn-yes {
+    width: 100%;
+    max-width: 400px;
+    padding: 1.8rem 5rem;
+    font-size: 1.8rem;
+  }
+}
