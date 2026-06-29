@@ -148,7 +148,7 @@ export default function ProposalFlow() {
   };
 
   const handleBack = () => {
-    setStep(prev => Math.max(2, prev - 1));
+    setStep(prev => Math.max(1, prev - 1));
   };
 
   const selectOption = (field, value) => {
