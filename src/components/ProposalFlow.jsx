@@ -126,7 +126,7 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  // Core dodge function — allows No button to move ANYWHERE on the entire screen
+  // Core dodge function — allows No button to move ANYWHERE on the screen without going out of bounds
   const dodgeNoButton = useCallback(() => {
     if (!noBtnRef.current) return;
 
@@ -136,9 +136,9 @@ export default function ProposalFlow() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    // Boundary constraints: allow translating to almost the edges of the screen
-    const maxX = Math.max(100, screenWidth / 2 - 90);
-    const maxY = Math.max(100, screenHeight / 2 - 50);
+    // Strict boundary constraints: keep buttons at least 110px away from horizontal edges, 80px from vertical
+    const maxX = Math.max(80, screenWidth / 2 - 110);
+    const maxY = Math.max(80, screenHeight / 2 - 80);
 
     // Generate a new position guaranteed to be far from the current one and within screen bounds
     let newX, newY, attempts = 0;
@@ -147,7 +147,7 @@ export default function ProposalFlow() {
       newY = (Math.random() * 2 - 1) * maxY;
       attempts++;
     } while (
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 150 &&
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 140 &&
       attempts < 30
     );
 
@@ -156,8 +156,8 @@ export default function ProposalFlow() {
     dodgeCount.current += 1;
 
     // Playful rotation and scale wobble
-    const rot = (Math.random() - 0.5) * 60;
-    const scl = 0.8 + Math.random() * 0.4;
+    const rot = (Math.random() - 0.5) * 50;
+    const scl = 0.85 + Math.random() * 0.3;
 
     setNoBtnStyle({ x: newX, y: newY, rotate: rot, scale: scl });
 
@@ -165,7 +165,7 @@ export default function ProposalFlow() {
     setNoEmoji(noEmojis[dodgeCount.current % noEmojis.length]);
   }, []);
 
-  // Proximity detection: mouse/touch within 130px of No button triggers dodge
+  // Proximity detection: mouse/touch within 120px of No button triggers dodge
   useEffect(() => {
     if (step !== 1) return;
 
@@ -176,22 +176,42 @@ export default function ProposalFlow() {
       const btnCX = rect.left + rect.width / 2;
       const btnCY = rect.top + rect.height / 2;
 
-      const clientX = e.clientX ?? (e.touches?.[0]?.clientX ?? 0);
-      const clientY = e.clientY ?? (e.touches?.[0]?.clientY ?? 0);
+      // Correctly extract coordinates for mouse or touch events
+      let clientX = 0;
+      let clientY = 0;
+
+      if (e.type === 'touchmove' || e.type === 'touchstart') {
+        if (e.touches && e.touches.length > 0) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else if (e.changedTouches && e.changedTouches.length > 0) {
+          clientX = e.changedTouches[0].clientX;
+          clientY = e.changedTouches[0].clientY;
+        }
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
 
       const dist = Math.sqrt((clientX - btnCX) ** 2 + (clientY - btnCY) ** 2);
 
-      // 130px proximity threshold (button radius is ~90px, so this triggers well before touch/click)
-      if (dist < 130) {
+      // 120px proximity threshold to trigger well before click/touch
+      if (dist < 120) {
+        // Prevent default touch behavior (scrolling/rubber-banding) on mobile step 1 during dodge
+        if (e.cancelable) {
+          e.preventDefault();
+        }
         dodgeNoButton();
       }
     };
 
     window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('touchstart', onPointerMove, { passive: false });
     return () => {
       window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('touchmove', onPointerMove);
+      window.removeEventListener('touchstart', onPointerMove);
     };
   }, [step, dodgeNoButton]);
 
