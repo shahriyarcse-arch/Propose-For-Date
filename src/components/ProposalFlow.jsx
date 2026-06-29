@@ -142,7 +142,7 @@ export default function ProposalFlow() {
     time: ''
   });
   
-  // No button dodge system — uses refs to avoid stale closures
+  const [isDodged, setIsDodged] = useState(false);
   const [noBtnStyle, setNoBtnStyle] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
   const noBtnPosRef = useRef({ x: 0, y: 0 });
   const btnContainerRef = useRef(null);
@@ -168,7 +168,7 @@ export default function ProposalFlow() {
     return () => clearInterval(interval);
   }, []);
 
-  // Core dodge function — keeps No button strictly inside the visible viewport
+  // Core dodge function — moves No button to absolute screen coordinates
   const dodgeNoButton = useCallback(() => {
     if (!noBtnRef.current) return;
 
@@ -177,39 +177,37 @@ export default function ProposalFlow() {
     const btnW = btn.offsetWidth || 100;
     const btnH = btn.offsetHeight || 40;
 
-    // Use full screen dimensions as boundary limits
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    // Safe area: limit maximum translation to avoid any viewport overflow (22% on mobile, 30% on desktop)
-    const isMobile = screenWidth < 600;
-    const maxX = isMobile ? Math.max(30, screenWidth * 0.28) : Math.max(50, (screenWidth - btnW) / 2 - 80);
-    const maxY = isMobile ? Math.max(30, screenHeight * 0.22) : Math.max(50, (screenHeight - btnH) / 2 - 120);
+    // Strict margins: keep 25px safe distance from any screen edge
+    const minX = 25;
+    const maxX = screenWidth - btnW - 25;
+    const minY = 25;
+    const maxY = screenHeight - btnH - 25;
 
-    // Generate a new position guaranteed to be far from the current one
+    // Generate absolute screen coordinate coordinates
     let newX, newY, attempts = 0;
     do {
-      newX = (Math.random() * 2 - 1) * maxX;
-      newY = (Math.random() * 2 - 1) * maxY;
+      newX = minX + Math.random() * (maxX - minX);
+      newY = minY + Math.random() * (maxY - minY);
       attempts++;
     } while (
-      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 100 &&
+      isDodged &&
+      Math.sqrt((newX - cur.x) ** 2 + (newY - cur.y) ** 2) < 140 &&
       attempts < 30
     );
 
-    // Update ref immediately (no stale closure)
     noBtnPosRef.current = { x: newX, y: newY };
     dodgeCount.current += 1;
+    setIsDodged(true);
 
-    // Playful rotation and scale wobble
     const rot = (Math.random() - 0.5) * 50;
     const scl = 0.85 + Math.random() * 0.3;
 
     setNoBtnStyle({ x: newX, y: newY, rotate: rot, scale: scl });
-
-    // Cycle through funny emojis
     setNoEmoji(noEmojis[dodgeCount.current % noEmojis.length]);
-  }, []);
+  }, [isDodged]);
 
   // Proximity detection: triggers dodge ONLY when pointer is fully on top of the No button
   useEffect(() => {
@@ -351,10 +349,24 @@ export default function ProposalFlow() {
                 }}
                 transition={{ type: "spring", stiffness: 220, damping: 14, mass: 0.4 }}
                 onMouseEnter={dodgeNoButton}
+                onPointerEnter={dodgeNoButton}
+                onPointerOver={dodgeNoButton}
                 onTouchStart={dodgeNoButton}
                 onTouchMove={dodgeNoButton}
                 onClick={dodgeNoButton}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '0.4rem',
+                  ...(isDodged ? {
+                    position: 'fixed',
+                    left: 0,
+                    top: 0,
+                    margin: 0,
+                    zIndex: 999,
+                    pointerEvents: 'auto'
+                  } : {})
+                }}
               >
                 <Icons.ShieldAlert /> No
               </motion.button>
