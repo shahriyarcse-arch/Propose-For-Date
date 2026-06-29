@@ -300,13 +300,12 @@ export default function ProposalFlow() {
         clientY = e.changedTouches[0].clientY;
       }
 
-      // Add proximity padding so button dodges BEFORE finger reaches it (essential for mobile)
-      const proximityPad = 40;
+      // Check if touch/cursor is directly on the button (no extra padding)
       const isNearby =
-        clientX >= rect.left - proximityPad &&
-        clientX <= rect.right + proximityPad &&
-        clientY >= rect.top - proximityPad &&
-        clientY <= rect.bottom + proximityPad;
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom;
 
       if (isNearby) {
         // Prevent scroll on mobile during touch interaction
