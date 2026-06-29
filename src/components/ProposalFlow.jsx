@@ -83,6 +83,34 @@ const Icons = {
       <ellipse cx="17" cy="14" rx="2" ry="4" />
     </svg>
   ),
+  Movie: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+      <line x1="7" y1="2" x2="7" y2="22"/>
+      <line x1="17" y1="2" x2="17" y2="22"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <line x1="2" y1="7" x2="7" y2="7"/>
+      <line x1="2" y1="17" x2="7" y2="17"/>
+      <line x1="17" y1="17" x2="22" y2="17"/>
+      <line x1="17" y1="7" x2="22" y2="7"/>
+    </svg>
+  ),
+  Art: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="9" cy="9" r="1" />
+      <circle cx="15" cy="9" r="1" />
+      <path d="M12 16c2.5 0 5-1.5 5-3H7c0 1.5 2.5 3 5 3z" />
+      <path d="M7.5 13.5a1.5 1.5 0 0 1-3 0" />
+    </svg>
+  ),
+  Shopping: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  ),
   LocalSpicy: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10c4.5 0 8-3.5 10-8H2" />
@@ -289,7 +317,10 @@ export default function ProposalFlow() {
     { id: 'Cafe', label: 'Cozy Cafe', desc: 'Grab a coffee and chat', icon: <Icons.Cafe /> },
     { id: 'Restaurant', label: 'Nice Dinner', desc: 'Go out for dinner', icon: <Icons.Restaurant /> },
     { id: 'Park', label: 'Scenic Park', desc: 'Take a walk in the park', icon: <Icons.Park /> },
-    { id: 'Rooftop', label: 'Rooftop', desc: 'Hang out with a view', icon: <Icons.Rooftop /> }
+    { id: 'Rooftop', label: 'Rooftop', desc: 'Hang out with a view', icon: <Icons.Rooftop /> },
+    { id: 'Movie', label: 'Movie Theater', desc: 'Watch a great movie', icon: <Icons.Movie /> },
+    { id: 'Art', label: 'Art Gallery', desc: 'Explore some art', icon: <Icons.Art /> },
+    { id: 'Shopping', label: 'Shopping Mall', desc: 'Window shopping & fun', icon: <Icons.Shopping /> }
   ];
 
   const foods = [
