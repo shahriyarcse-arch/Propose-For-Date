@@ -1,9 +1,20 @@
-// Database wrapper for zero-setup storage with local storage fallback
-const LOCAL_STORAGE_KEY = 'date_proposal_responses';
+import { createClient } from '@supabase/supabase-js';
 
-// We use a public MockAPI endpoint for zero-setup remote storage.
-// This allows data to sync across devices (e.g. from her phone to your phone).
-const MOCK_API_URL = 'https://66804a9d5569275da471f543.mockapi.io/api/v1/responses';
+// Environment variables for Supabase database.
+// We fallback to local storage if they are not provided, ensuring zero-setup out of the box.
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+let supabase = null;
+if (supabaseUrl && supabaseAnonKey) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+  }
+}
+
+const LOCAL_STORAGE_KEY = 'date_proposal_responses';
 
 export const db = {
   // Save a new response
@@ -13,56 +24,48 @@ export const db = {
       timestamp: new Date().toISOString(),
     };
 
-    // 1. Save to local storage first (always have a backup)
-    const localData = this.getLocalResponses();
-    localData.push({ ...newResponse, id: Date.now().toString() });
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localData));
-
-    // 2. Save to MockAPI (so it's accessible across devices)
-    try {
-      const response = await fetch(MOCK_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newResponse),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save to remote database');
+    if (supabase) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('responses')
+          .insert([newResponse])
+          .select();
+        
+        if (error) throw error;
+        if (inserted && inserted.length > 0) {
+          return inserted[0];
+        }
+      } catch (error) {
+        console.warn('Supabase insert failed. Saving to local storage instead:', error);
       }
-      return await response.json();
-    } catch (error) {
-      console.warn('Could not save to remote database. Saved locally instead:', error);
-      return newResponse;
     }
+
+    // Fallback to local storage
+    const localData = this.getLocalResponses();
+    const item = { ...newResponse, id: Date.now().toString() };
+    localData.push(item);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localData));
+    return item;
   },
 
   // Get all responses
   async getResponses() {
-    try {
-      const response = await fetch(MOCK_API_URL);
-      if (!response.ok) {
-        throw new Error('Failed to fetch from remote database');
+    if (supabase) {
+      try {
+        const { data: fetched, error } = await supabase
+          .from('responses')
+          .select('*')
+          .order('timestamp', { ascending: false });
+
+        if (error) throw error;
+        if (fetched) return fetched;
+      } catch (error) {
+        console.warn('Supabase fetch failed. Loading local responses instead:', error);
       }
-      const remoteData = await response.json();
-      
-      // Merge with local storage to ensure no data is lost
-      const localData = this.getLocalResponses();
-      const merged = [...remoteData];
-      
-      // Add local responses that aren't in remote (by comparing timestamp/name)
-      localData.forEach(localItem => {
-        if (!merged.some(remoteItem => remoteItem.name === localItem.name && remoteItem.timestamp === localItem.timestamp)) {
-          merged.push(localItem);
-        }
-      });
-      
-      return merged.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    } catch (error) {
-      console.warn('Could not fetch from remote database. Showing local responses:', error);
-      return this.getLocalResponses().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     }
+
+    // Fallback to local storage
+    return this.getLocalResponses().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   },
 
   // Helper: Get local storage responses
@@ -73,20 +76,26 @@ export const db = {
 
   // Clear a response by ID
   async deleteResponse(id) {
-    // 1. Delete from local storage
+    if (supabase) {
+      try {
+        // If it's a numeric timestamp ID, it was created locally. Skip Supabase deletion for it.
+        const isLocalOnly = !isNaN(id) && id.length < 15;
+        if (!isLocalOnly) {
+          const { error } = await supabase
+            .from('responses')
+            .delete()
+            .eq('id', id);
+          if (error) throw error;
+        }
+      } catch (error) {
+        console.warn('Supabase delete failed. Deleting locally:', error);
+      }
+    }
+
+    // Fallback/Local storage delete
     const localData = this.getLocalResponses();
     const updatedLocal = localData.filter(item => item.id !== id);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedLocal));
-
-    // 2. Delete from remote database (if it's a remote ID)
-    try {
-      const response = await fetch(`${MOCK_API_URL}/${id}`, {
-        method: 'DELETE',
-      });
-      return response.ok;
-    } catch (error) {
-      console.warn('Could not delete from remote database. Deleted locally:', error);
-      return true;
-    }
+    return true;
   }
 };
