@@ -401,6 +401,11 @@ export default function ProposalFlow() {
               className="input-field"
               value={formData.name}
               onChange={(e) => selectOption('name', e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && formData.name.trim()) {
+                  handleNext();
+                }
+              }}
               autoFocus
             />
             
