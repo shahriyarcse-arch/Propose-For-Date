@@ -276,11 +276,12 @@ export default function ProposalFlow() {
     setIsSubmitting(true);
     try {
       await db.saveResponse(formData);
+      setStep(6);
     } catch (err) {
-      console.warn('Network submit failed, proceeding to confirmation screen. Details will save on retry.', err);
+      console.error('Network submit failed:', err);
+      alert('Failed to save your response! Error: ' + (err.message || 'Unknown Error'));
     } finally {
       setIsSubmitting(false);
-      setStep(6);
     }
   };
 
