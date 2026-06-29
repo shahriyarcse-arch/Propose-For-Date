@@ -82,7 +82,7 @@ body::after {
   position: relative;
 }
 
-.flow-wrapper, .dashboard-wrapper {
+.flow-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
@@ -90,7 +90,19 @@ body::after {
   align-items: center;
   flex-direction: column;
   position: relative;
-  overflow-y: auto; /* Let wrapper scroll if contents exceed height */
+  overflow: hidden; /* Prevent No button from causing scrollbars during dodge */
+  padding: 2rem 1.25rem;
+}
+
+.dashboard-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto; /* Let admin table scroll if content exceeds screen height */
   padding: 2rem 1.25rem;
 }
 
