@@ -412,8 +412,8 @@ export default function ProposalFlow() {
              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.Heart />
             </div>
-            <h1>Are you free to go out with me sometime?</h1>
-            <p>Select your answer below:</p>
+             <h1>Would you do me the honor of going out on a date with me?</h1>
+             <p>No pressure, but I've already planned a perfect day for us... 😉</p>
             
             <div className="btn-container" ref={btnContainerRef}>
               <motion.button 
@@ -461,12 +461,12 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.User />
             </div>
-            <h1>Awesome! Let's plan it out.</h1>
-            <p>What is your name?</p>
+             <h1>Yay! Let's make it official...</h1>
+             <p>But first, tell me, what should I call my lucky date?</p>
             
             <input 
               type="text" 
-              placeholder="Type your name here..." 
+              placeholder="Your name (or 'My Love')..." 
               className="input-field"
               value={formData.name}
               onChange={(e) => selectOption('name', e.target.value)}
@@ -499,8 +499,8 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.LocationPin />
             </div>
-            <h1>Where should we go?</h1>
-            <p>Pick a location you prefer:</p>
+             <h1>Where is our dream destination?</h1>
+             <p>Where do you want me to take you? Choose our vibe: ✨</p>
             
             <div className="options-grid">
               {locations.map((loc, idx) => (
@@ -528,8 +528,8 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.FoodFork />
             </div>
-            <h1>What should we eat?</h1>
-            <p>Choose your favorite food option:</p>
+             <h1>What are we treating our taste buds to?</h1>
+             <p>Cravings are always better when shared. Pick our menu: 😋</p>
             
             <div className="options-grid">
               {foods.map((food, idx) => (
@@ -607,8 +607,8 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.Calendar />
             </div>
-            <h1>When are you free?</h1>
-            <p>Select a date and time slot:</p>
+             <h1>When can I finally see you?</h1>
+             <p>Pick our perfect day and time slot: 🗓️</p>
 
             {/* Custom Calendar */}
             <div className="custom-calendar">
@@ -683,21 +683,21 @@ export default function ProposalFlow() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.SuccessBadge />
             </div>
-            <h1>It's a Date!</h1>
-            <p style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '1.5rem' }}>
-              Awesome, {formData.name}!
-            </p>
-            <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
-              Our schedule is set:
-              <br />
-              Location: <strong>{formData.location}</strong>
-              <br />
-              Food: <strong>{formData.food}</strong>
-              <br />
-              Time: <strong>{formData.date}</strong> at <strong>{formData.time}</strong>
-            </p>
-            <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
-              <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Response saved. Talk to you soon!</p>
+             <h1>It's officially a Date! ❤️</h1>
+             <p style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '1.5rem' }}>
+               I'm literally counting down the minutes, {formData.name}! ✨
+             </p>
+             <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
+               Here is what we planned:
+               <br />
+               📍 Destination: <strong>{formData.location}</strong>
+               <br />
+               🍔 Menu: <strong>{formData.food}</strong>
+               <br />
+               ⏰ Perfect Moment: <strong>{formData.date}</strong> during <strong>{formData.time}</strong>
+             </p>
+             <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
+               <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Our little plan is locked into my heart (and database). Can't wait! 🥰</p>
             </div>
           </motion.div>
         )}
