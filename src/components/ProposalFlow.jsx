@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { db } from '../db';
 
 // High-Quality SVG Icons for a Professional & Consistent Look
@@ -198,6 +199,19 @@ const Icons = {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
     </svg>
+  ),
+  VolumeHigh: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+    </svg>
+  ),
+  VolumeMute: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="23" y1="9" x2="17" y2="15" />
+      <line x1="17" y1="9" x2="23" y2="15" />
+    </svg>
   )
 };
 
@@ -220,6 +234,64 @@ export default function ProposalFlow() {
   const dodgeCount = useRef(0);
   const [noEmoji, setNoEmoji] = useState('😢');
   const [hearts, setHearts] = useState([]);
+  const audioRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Trigger confetti when we reach Step 6
+  useEffect(() => {
+    if (step === 6) {
+      // Fire confetti multiple times for a beautiful fireworks effect!
+      const duration = 6 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+      const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        // fire from left and right corners
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+      }, 250);
+
+      return () => clearInterval(interval);
+    }
+  }, [step]);
+
+  // Attempt to play audio on first user click/touch
+  const startAudio = () => {
+    if (audioRef.current && isMuted) {
+      audioRef.current.play().then(() => {
+        setIsMuted(false);
+      }).catch(err => {
+        // Autoplay policy prevented it, it's fine, wait for direct toggle
+      });
+    }
+  };
+
+  const toggleMute = (e) => {
+    e.stopPropagation(); // prevent triggering parent clicks
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play().then(() => {
+          setIsMuted(false);
+          audioRef.current.muted = false;
+        }).catch(err => {
+          console.error("Error playing audio:", err);
+        });
+      } else {
+        const nextMuted = !audioRef.current.muted;
+        audioRef.current.muted = nextMuted;
+        setIsMuted(nextMuted);
+      }
+    }
+  };
 
   const noEmojis = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
@@ -397,7 +469,26 @@ export default function ProposalFlow() {
   };
 
   return (
-    <div className={`flow-wrapper ${step === 1 ? 'no-scroll' : ''}`}>
+    <div className={`flow-wrapper ${step === 1 ? 'no-scroll' : ''}`} onClick={startAudio} onTouchStart={startAudio}>
+      {/* Background Audio */}
+      <audio 
+        ref={audioRef} 
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" 
+        loop 
+        preload="auto"
+      />
+
+      {/* Floating Sound Toggle */}
+      <motion.button
+        className="sound-toggle-btn"
+        onClick={toggleMute}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        title={isMuted ? "Unmute Background Music" : "Mute Background Music"}
+      >
+        {isMuted ? <Icons.VolumeMute /> : <Icons.VolumeHigh />}
+      </motion.button>
+
       {/* Floating Hearts Background */}
       <div className="hearts-container">
         {hearts.map(h => (
