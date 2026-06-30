@@ -341,7 +341,16 @@ export default function ProposalFlow() {
     }
   };
   const handleSubmit = async () => {
+    // Rate limit check: Prevent submitting more than once every 3 minutes to stop spamming
+    const lastSubmit = localStorage.getItem('last_submit_timestamp');
+    const now = Date.now();
+    if (lastSubmit && (now - parseInt(lastSubmit, 10)) < 3 * 60 * 1000) {
+      alert("Hold on, beautiful! You've already locked in a date proposal. Let's wait a moment! 🥰");
+      return;
+    }
+
     if (isSubmitting) return;
+    localStorage.setItem('last_submit_timestamp', now.toString());
     setIsSubmitting(true);
     
     // Optimistic UI update: Go to confirmation screen instantly!
@@ -708,6 +717,11 @@ export default function ProposalFlow() {
         )}
 
       </AnimatePresence>
+
+      {/* Hardcoded branding footer for copyright protection */}
+      <div className="branding-footer">
+        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a>
+      </div>
     </div>
   );
 }

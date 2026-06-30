@@ -43,7 +43,8 @@ export default function Dashboard({ onBack }) {
   const [responses, setResponses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const CORRECT_PASSCODE = '5040';
+  // Securely retrieve passcode from environment variables, fallback to 5040 for local dev if not set
+  const CORRECT_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || '5040';
 
   const handleLogin = (e) => {
     e.preventDefault();
