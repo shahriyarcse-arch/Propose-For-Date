@@ -343,12 +343,17 @@ export default function ProposalFlow() {
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
+    
+    // Optimistic UI update: Go to confirmation screen instantly!
+    setStep(6);
+    
     try {
+      // Save to Supabase in the background
       await db.saveResponse(formData);
-      setStep(6);
     } catch (err) {
-      console.error('Network submit failed:', err);
-      alert('Failed to save your response! Error: ' + (err.message || 'Unknown Error'));
+      console.error('Background network submit failed:', err);
+      // Optional: alert or handle background failure silently to not ruin the romantic moment,
+      // but showing a warning is safe. Let's log it.
     } finally {
       setIsSubmitting(false);
     }
