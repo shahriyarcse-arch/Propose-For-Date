@@ -32,7 +32,9 @@ Since local storage fallback is disabled, you must connect a Supabase database t
 
 1. Go to [Supabase](https://supabase.com/) and create a free account.
 2. Create a new project.
-3. In your Supabase SQL Editor, run the following query to create the `responses` table:
+3. In your Supabase SQL Editor, run the following queries to create the required tables:
+
+   **`responses` table** (stores date proposal answers):
    ```sql
    create table responses (
      id uuid default gen_random_uuid() primary key,
@@ -41,7 +43,19 @@ Since local storage fallback is disabled, you must connect a Supabase database t
      food text,
      date date,
      time text,
+     created_by text default '',
      timestamp timestamp with time zone default timezone('utc'::text, now()) not null
+   );
+   ```
+
+   **`proposals` table** (stores short unique links for the public generator):
+   ```sql
+   create table proposals (
+     id text primary key,
+     sender_name text not null,
+     recipient_name text default '',
+     passcode text default '',
+     created_at timestamp with time zone default timezone('utc'::text, now()) not null
    );
    ```
 4. Copy your project's **Project URL** and **API Anon Key** from your Project Settings -> API page.

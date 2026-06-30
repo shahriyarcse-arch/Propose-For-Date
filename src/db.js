@@ -12,6 +12,15 @@ if (supabaseUrl && supabaseAnonKey) {
   }
 }
 
+function generateShortId(length = 6) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
 export const db = {
   // Save a new response directly to Supabase
   async saveResponse(data) {
@@ -26,6 +35,7 @@ export const db = {
       food: data.food || '',
       date: data.date || '',
       time: data.time || '',
+      created_by: data.created_by || '',
       timestamp: new Date().toISOString(),
     };
 
@@ -67,5 +77,48 @@ export const db = {
     
     if (error) throw error;
     return true;
+  },
+
+  // ─── Proposals Table (for unique short links) ───
+
+  async saveProposal({ sender_name, recipient_name, passcode }) {
+    if (!supabase) {
+      // Fallback: return a local ID without persisting
+      return { id: generateShortId(), sender_name, recipient_name, passcode };
+    }
+
+    let id;
+    let attempts = 0;
+    do {
+      id = generateShortId();
+      const { data: existing } = await supabase
+        .from('proposals')
+        .select('id')
+        .eq('id', id)
+        .maybeSingle();
+      if (!existing) break;
+      attempts++;
+    } while (attempts < 5);
+
+    const { data: inserted, error } = await supabase
+      .from('proposals')
+      .insert([{ id, sender_name, recipient_name, passcode }])
+      .select();
+
+    if (error) throw error;
+    return inserted?.[0] || { id, sender_name, recipient_name, passcode };
+  },
+
+  async getProposal(id) {
+    if (!supabase) return null;
+
+    const { data, error } = await supabase
+      .from('proposals')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
   }
 };

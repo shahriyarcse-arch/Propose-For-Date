@@ -215,10 +215,12 @@ const Icons = {
   )
 };
 
-export default function ProposalFlow() {
-  const [step, setStep] = useState(1); // 1: Will you, 2: Name input, 3: Location, 4: Cuisine, 5: Timing, 6: Success
+export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
+  const senderName = customParams.by || '';
+  const recipientName = customParams.to || '';
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: '',
+    name: recipientName,
     location: '',
     food: '',
     date: '',
@@ -429,8 +431,12 @@ export default function ProposalFlow() {
     setStep(6);
     
     try {
-      // Save to Supabase in the background
-      await db.saveResponse(formData);
+      // Save to Supabase in the background, tag with sender name for filtering
+      const dataToSave = { ...formData };
+      if (senderName) {
+        dataToSave.created_by = senderName;
+      }
+      await db.saveResponse(dataToSave);
     } catch (err) {
       console.error('Background network submit failed:', err);
       // Optional: alert or handle background failure silently to not ruin the romantic moment,
@@ -517,8 +523,8 @@ export default function ProposalFlow() {
              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.Heart />
             </div>
-             <h1>Would you do me the honor of going out on a date with me?</h1>
-             <p>No pressure, but I've already planned a perfect day for us... 😉</p>
+             <h1>{senderName ? `Hey ${recipientName || 'beautiful'}! ${senderName} wants to take you out on a date!` : 'Would you do me the honor of going out on a date with me?'}</h1>
+             <p>{senderName ? `${senderName} has already planned a perfect day for you two... 😉` : "No pressure, but I've already planned a perfect day for us... 😉"}</p>
             
             <div className="btn-container" ref={btnContainerRef}>
               <motion.button 
@@ -556,6 +562,31 @@ export default function ProposalFlow() {
                 <Icons.ShieldAlert /> No
               </motion.button>
             </div>
+            {!senderName && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={onOpenGenerator}
+                style={{
+                  marginTop: '2rem',
+                  background: 'none',
+                  border: '1.5px dashed rgba(255,71,126,0.3)',
+                  borderRadius: '50px',
+                  padding: '0.6rem 1.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Create Your Own Proposal Link 💌
+              </motion.button>
+            )}
           </motion.div>
         )}
 
@@ -790,7 +821,10 @@ export default function ProposalFlow() {
             </div>
              <h1>It's officially a Date! ❤️</h1>
              <p style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '1.5rem' }}>
-               I'm literally counting down the minutes, {formData.name}! ✨
+               {senderName 
+                 ? `${senderName} is literally counting down the minutes, ${formData.name}! ✨`
+                 : `I'm literally counting down the minutes, ${formData.name}! ✨`
+               }
              </p>
              <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
                Here is what we planned:
@@ -802,8 +836,19 @@ export default function ProposalFlow() {
                ⏰ Perfect Moment: <strong>{formData.date}</strong> during <strong>{formData.time}</strong>
              </p>
              <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
-               <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>Our little plan is locked into my heart (and database). Can't wait! 🥰</p>
-            </div>
+               <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>
+                 {senderName 
+                   ? `${senderName}'s little plan is locked into the heart (and database). Can't wait! 🥰`
+                   : "Our little plan is locked into my heart (and database). Can't wait! 🥰"
+                 }
+               </p>
+               <a 
+                 href={`${window.location.origin}/?mode=create`}
+                 style={{ display: 'inline-block', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline', fontSize: '1rem' }}
+               >
+                 Want to create your own proposal? Click here! 💌
+               </a>
+             </div>
           </motion.div>
         )}
 
