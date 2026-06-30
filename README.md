@@ -1,5 +1,8 @@
 # 💖 Date Proposal Web App
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Created with love by **[Shahriyar](https://github.com/shahriyarcse-arch)**.
+
 An interactive, responsive, and visually stunning web application for proposing a date. It features realistic animations, a playful escaping "No" button using spring physics, custom vector SVG graphics, and a passcode-protected admin dashboard to track responses in real-time.
 
 Built with **React (Vite)**, **Framer Motion**, **Tailwind CSS**, and **Supabase**.
@@ -73,3 +76,12 @@ On the free tier, Supabase automatically pauses projects after 7 days of inactiv
 - **Animations**: Framer Motion (Spring-physics based button escape, fluent page-slide transitions)
 - **Styling**: Tailwind CSS + Custom Ambient Mesh Backgrounds
 - **Database Client**: Supabase JS Client (Direct integration)
+
+---
+
+## 📄 License & Copyright
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### ⚠️ Attribution Policy
+While you are free to fork, clone, and customize this application for personal use, **you must keep the original attribution credits to Shahriyar in any redistributed version**. Completely removing credits or claiming this work as entirely your own is strictly prohibited. Thank you for respecting open-source contribution! ❤️
