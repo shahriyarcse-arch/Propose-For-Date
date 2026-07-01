@@ -556,7 +556,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
               <Icons.Heart />
             </div>
              <h1>{senderName ? `Hey ${recipientName || 'beautiful'}... will you go on a date with ${senderName}? 💕` : 'Will you go on a date with me?'}</h1>
-             <p>{senderName ? `${senderName} has a perfect day planned for you two... 😉` : "A perfect evening is waiting for us... 😉"}</p>
+             <p>{senderName ? `${senderName} has a perfect day planned for you two... 😉` : "I've got the perfect plan for us... just waiting for your yes 😉"}</p>
             
             <div className="btn-container" ref={btnContainerRef}>
               <motion.button 
