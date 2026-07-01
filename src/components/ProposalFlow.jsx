@@ -936,10 +936,6 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
 
       </AnimatePresence>
 
-      {/* Hardcoded branding footer for copyright protection */}
-      <div className="branding-footer">
-        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a>
-      </div>
     </div>
   );
 }
