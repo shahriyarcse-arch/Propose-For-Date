@@ -109,8 +109,8 @@ export default function PublicLanding({ onEnterGenerator }) {
         </div>
       </motion.div>
 
-      <div className="branding-footer">
-        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a>
+      <div style={{ marginTop: '2rem', fontSize: '0.85rem', color: 'var(--text-muted)', opacity: 0.65, fontWeight: 600, textAlign: 'center', letterSpacing: '0.5px' }}>
+        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>Shahriyar</a>
       </div>
     </div>
   );
