@@ -59,33 +59,35 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {view === 'proposal' ? (
-          <ProposalFlow key="proposal" customParams={params} onOpenGenerator={() => setView('public')} />
-        ) : view === 'dashboard' ? (
-          <Dashboard key="dashboard" onBack={() => setView('proposal')} customParams={params} />
-        ) : view === 'generator' ? (
-          <LinkGenerator key="generator" onBack={() => setView('public')} />
-        ) : view === 'resolving' ? (
-          <motion.div
-            key="resolving"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="glass-container"
-            style={{ maxWidth: '450px' }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-            </div>
-            <h1 style={{ fontSize: '1.6rem' }}>{resolveError || 'Loading your proposal...'}</h1>
-          </motion.div>
-        ) : (
-          <PublicLanding key="public" onEnterGenerator={() => setView('generator')} />
-        )}
-      </AnimatePresence>
+      <div className="app-content">
+        <AnimatePresence mode="wait">
+          {view === 'proposal' ? (
+            <ProposalFlow key="proposal" customParams={params} onOpenGenerator={() => setView('public')} />
+          ) : view === 'dashboard' ? (
+            <Dashboard key="dashboard" onBack={() => setView('proposal')} customParams={params} />
+          ) : view === 'generator' ? (
+            <LinkGenerator key="generator" onBack={() => setView('public')} />
+          ) : view === 'resolving' ? (
+            <motion.div
+              key="resolving"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="glass-container"
+              style={{ maxWidth: '450px' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                </svg>
+              </div>
+              <h1 style={{ fontSize: '1.6rem' }}>{resolveError || 'Loading your proposal...'}</h1>
+            </motion.div>
+          ) : (
+            <PublicLanding key="public" onEnterGenerator={() => setView('generator')} />
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Floating admin trigger - visible from proposal and public views */}
       {(view === 'proposal' || view === 'public') && (
