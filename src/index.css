@@ -89,13 +89,13 @@ body::after {
   flex-direction: column;
   align-items: center;
   position: relative;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 2rem 1.25rem 4rem;
+  overflow-y: auto; /* Enable native scrolling when steps overflow short viewports */
+  -webkit-overflow-scrolling: touch; /* Momentum scroll on iOS */
+  padding: 2rem 1.25rem;
 }
 
 .flow-wrapper.no-scroll {
-  overflow: hidden;
+  overflow: hidden; /* Fully block scrolling on step 1 to prevent dodge jitter */
 }
 
 .dashboard-wrapper {
@@ -107,7 +107,7 @@ body::after {
   position: relative;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 2rem 1.25rem 4rem;
+  padding: 2rem 1.25rem;
 }
 
 
@@ -693,16 +693,16 @@ tr:hover {
 
 /* Footer copyright branding */
 .branding-footer {
-  position: fixed;
-  bottom: 0.8rem;
+  position: absolute;
+  bottom: 1.2rem;
   left: 50%;
   transform: translateX(-50%);
   font-size: clamp(0.7rem, 2vw, 0.85rem);
   color: var(--text-muted);
-  opacity: 0.8;
+  opacity: 0.65;
   font-weight: 600;
   text-align: center;
-  z-index: 100;
+  z-index: 10;
   pointer-events: auto;
   letter-spacing: 0.5px;
   width: 100%;
