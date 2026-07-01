@@ -495,36 +495,47 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
         {isMuted ? <Icons.VolumeMute /> : <Icons.VolumeHigh />}
       </motion.button>
 
-      {/* Create Your Own Proposal Link - top left */}
+      {/* Create Proposal Icon - drag right or tap */}
       {!senderName && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onOpenGenerator}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.8, type: "spring", stiffness: 180, damping: 14 }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 80 }}
+          dragElastic={0.25}
+          onDragEnd={(_, info) => {
+            if (info.offset.x > 50) onOpenGenerator();
+          }}
+          onTap={onOpenGenerator}
+          whileHover={{ scale: 1.1, boxShadow: '0 12px 30px rgba(255, 71, 126, 0.35)' }}
+          whileTap={{ scale: 0.88 }}
+          title="Create your own proposal — drag right or tap"
           style={{
             position: 'absolute',
             top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
             left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
-            background: 'rgba(255,255,255,0.7)',
-            border: '1.5px solid rgba(255,255,255,0.5)',
-            borderRadius: '50px',
-            padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 3vw, 1.4rem)',
-            fontSize: 'clamp(0.7rem, 2vw, 0.85rem)',
-            fontWeight: 600,
-            color: 'var(--text-muted)',
-            cursor: 'pointer',
-            fontFamily: 'var(--font)',
+            width: 'clamp(42px, 6.5vw, 50px)',
+            height: 'clamp(42px, 6.5vw, 50px)',
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.95)',
+            border: '2.5px solid rgba(255, 255, 255, 0.7)',
+            boxShadow: '0 8px 25px rgba(255, 71, 126, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'grab',
             zIndex: 100,
-            transition: 'all 0.2s ease',
             backdropFilter: 'blur(8px)',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.03)'
+            userSelect: 'none'
           }}
         >
-          Create Your Own 💌
-        </motion.button>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            <path d="M19 3l.4 1.1L20.5 4l-1.1.4L19 5.5l-.4-1.1L17.5 4l1.1-.4L19 3z" fill="var(--primary)" />
+            <path d="M16 7l.3.8L17 8l-.7.3-.3.8-.3-.8L15 8l.7-.3.3-.8z" fill="var(--primary)" />
+          </svg>
+        </motion.div>
       )}
 
       {/* Floating Hearts Background */}
