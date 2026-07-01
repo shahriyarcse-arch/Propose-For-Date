@@ -484,7 +484,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
       {/* Background Audio */}
       <audio 
         ref={audioRef} 
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" 
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" 
         loop 
         preload="auto"
       />
