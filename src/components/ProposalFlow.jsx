@@ -501,7 +501,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
       </motion.button>
 
       {/* Create Proposal Icon - drag right or tap */}
-      {!senderName && (
+      {!senderName && step === 1 && (
         <>
           {/* Drag track pill that reveals behind icon */}
           <motion.div
