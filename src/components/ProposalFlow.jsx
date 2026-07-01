@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { db } from '../db';
 
@@ -228,6 +228,11 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dragX = useMotionValue(0);
+  const arrowOpacity = useTransform(dragX, [0, 55], [0, 1]);
+  const iconBg = useTransform(dragX, [0, 55], ['rgba(255,255,255,0.95)', 'rgba(255,240,243,0.95)']);
+  const iconShadow = useTransform(dragX, [0, 55], ['0 8px 25px rgba(255,71,126,0.2)', '0 12px 35px rgba(255,71,126,0.55)']);
+  const iconRotate = useTransform(dragX, [0, 55], [0, -6]);
   const [isDodged, setIsDodged] = useState(false);
   const [noBtnStyle, setNoBtnStyle] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
   const noBtnPosRef = useRef({ x: 0, y: 0 });
@@ -497,45 +502,103 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
 
       {/* Create Proposal Icon - drag right or tap */}
       {!senderName && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, type: "spring", stiffness: 180, damping: 14 }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 80 }}
-          dragElastic={0.25}
-          onDragEnd={(_, info) => {
-            if (info.offset.x > 50) onOpenGenerator();
-          }}
-          onTap={onOpenGenerator}
-          whileHover={{ scale: 1.1, boxShadow: '0 12px 30px rgba(255, 71, 126, 0.35)' }}
-          whileTap={{ scale: 0.88 }}
-          title="Create your own proposal — drag right or tap"
-          style={{
-            position: 'absolute',
-            top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
-            left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
-            width: 'clamp(42px, 6.5vw, 50px)',
-            height: 'clamp(42px, 6.5vw, 50px)',
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.95)',
-            border: '2.5px solid rgba(255, 255, 255, 0.7)',
-            boxShadow: '0 8px 25px rgba(255, 71, 126, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'grab',
-            zIndex: 100,
-            backdropFilter: 'blur(8px)',
-            userSelect: 'none'
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            <path d="M19 3l.4 1.1L20.5 4l-1.1.4L19 5.5l-.4-1.1L17.5 4l1.1-.4L19 3z" fill="var(--primary)" />
-            <path d="M16 7l.3.8L17 8l-.7.3-.3.8-.3-.8L15 8l.7-.3.3-.8z" fill="var(--primary)" />
-          </svg>
-        </motion.div>
+        <>
+          {/* Drag track pill that reveals behind icon */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              height: 'clamp(42px, 6.5vw, 50px)',
+              borderRadius: '25px',
+              background: 'linear-gradient(90deg, var(--primary), var(--secondary))',
+              transformOrigin: 'left center',
+              zIndex: 98,
+              opacity: arrowOpacity,
+              width: 'clamp(130px, 20vw, 170px)'
+            }}
+          />
+
+          {/* Arrow label on track */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              height: 'clamp(42px, 6.5vw, 50px)',
+              width: 'clamp(130px, 20vw, 170px)',
+              borderRadius: '25px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              paddingRight: 'clamp(12px, 2.5vw, 18px)',
+              zIndex: 99,
+              opacity: arrowOpacity,
+              color: 'white',
+              fontWeight: 700,
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              fontFamily: 'var(--font)',
+              gap: '6px',
+              pointerEvents: 'none'
+            }}
+          >
+            <span>Create</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+            </svg>
+          </motion.div>
+
+          {/* Draggable icon */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, type: "spring", stiffness: 180, damping: 14 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 55 }}
+            dragElastic={0.1}
+            dragMomentum={false}
+            onDrag={(_, info) => {
+              dragX.set(Math.max(0, Math.min(55, info.offset.x)));
+            }}
+            onDragEnd={(_, info) => {
+              if (info.offset.x > 40) {
+                onOpenGenerator();
+              }
+              dragX.set(0);
+            }}
+            onTap={onOpenGenerator}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.85 }}
+            title="Create your own proposal — drag right or tap"
+            style={{
+              x: dragX,
+              rotate: iconRotate,
+              background: iconBg,
+              boxShadow: iconShadow,
+              position: 'absolute',
+              top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+              width: 'clamp(42px, 6.5vw, 50px)',
+              height: 'clamp(42px, 6.5vw, 50px)',
+              borderRadius: '50%',
+              border: '2.5px solid rgba(255, 255, 255, 0.7)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'grab',
+              zIndex: 101,
+              backdropFilter: 'blur(8px)',
+              userSelect: 'none',
+              touchAction: 'none'
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              <path d="M19 3l.4 1.1L20.5 4l-1.1.4L19 5.5l-.4-1.1L17.5 4l1.1-.4L19 3z" fill="var(--primary)" />
+              <path d="M16 7l.3.8L17 8l-.7.3-.3.8-.3-.8L15 8l.7-.3.3-.8z" fill="var(--primary)" />
+            </svg>
+          </motion.div>
+        </>
       )}
 
       {/* Floating Hearts Background */}
