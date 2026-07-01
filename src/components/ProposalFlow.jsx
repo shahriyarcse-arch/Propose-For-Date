@@ -484,7 +484,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
       {/* Background Audio */}
       <audio 
         ref={audioRef} 
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" 
+        src="/seethestars.mp3" 
         loop 
         preload="auto"
       />
@@ -938,7 +938,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
 
       {/* Hardcoded branding footer for copyright protection */}
       <div className="branding-footer">
-        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a>
+        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a> · Music: <a href="https://open.spotify.com/artist/03JYfsI9Ke7JFuxHD239m2" target="_blank" rel="noopener noreferrer">Ron Gelinas</a>
       </div>
     </div>
   );
