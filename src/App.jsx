@@ -103,11 +103,6 @@ export default function App() {
           </svg>
         </motion.div>
       )}
-
-      {/* Global branding footer — fixed on all views */}
-      <div className="branding-footer">
-        Designed with ❤️ by <a href="https://github.com/shahriyarcse-arch" target="_blank" rel="noopener noreferrer">Shahriyar</a>
-      </div>
     </>
   );
 }
