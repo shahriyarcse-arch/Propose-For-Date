@@ -567,24 +567,27 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={onOpenGenerator}
                 style={{
-                  marginTop: '1.5rem',
-                  background: 'none',
-                  border: '1.5px dashed rgba(255,71,126,0.3)',
+                  position: 'absolute',
+                  top: 'clamp(0.8rem, 3vw, 1.5rem)',
+                  left: 'clamp(0.8rem, 3vw, 1.5rem)',
+                  background: 'rgba(255,71,126,0.08)',
+                  border: 'none',
                   borderRadius: '50px',
                   padding: 'clamp(0.4rem, 2vw, 0.7rem) clamp(1rem, 4vw, 2rem)',
                   fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
-                  fontWeight: 600,
-                  color: 'var(--text-muted)',
+                  fontWeight: 700,
+                  color: 'var(--primary)',
                   cursor: 'pointer',
                   fontFamily: 'var(--font)',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s ease',
+                  zIndex: 20
                 }}
               >
-                Create Your Own Proposal Link 💌
+                Create Your Own 💌
               </motion.button>
             )}
           </motion.div>
