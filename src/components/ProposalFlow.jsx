@@ -555,8 +555,8 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.Heart />
             </div>
-             <h1>{senderName ? `Hey ${recipientName || 'beautiful'}... ${senderName} can't stop thinking about you and has to ask: will you be their date? 💕` : 'I\'ve been dreaming of this moment... will you make me the happiest person and go on a date with me?'}</h1>
-             <p>{senderName ? `${senderName} has planned something ridiculously cute for you two... ready to say yes? 😉` : "I already have the most perfect evening planned for us... just waiting for you to say yes 😉"}</p>
+             <h1>{senderName ? `Hey ${recipientName || 'beautiful'}... will you go on a date with ${senderName}? 💕` : 'Will you go on a date with me?'}</h1>
+             <p>{senderName ? `${senderName} has a perfect day planned for you two... 😉` : "A perfect evening is waiting for us... 😉"}</p>
             
             <div className="btn-container" ref={btnContainerRef}>
               <motion.button 
@@ -605,12 +605,12 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.User />
             </div>
-             <h1>You said yes!? My heart is doing backflips! 🥹</h1>
-             <p>Now tell me, what name should I whisper when I see you?</p>
+             <h1>Yay! You made my day! 🥹</h1>
+             <p>Now tell me your name so I know what to call my date:</p>
             
             <input 
               type="text" 
-              placeholder="e.g. Beautiful, My Love, or your real name..." 
+              placeholder="Your name (or just 'My Love')..." 
               className="input-field"
               value={formData.name}
               onChange={(e) => selectOption('name', e.target.value)}
@@ -643,8 +643,8 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.LocationPin />
             </div>
-             <h1>Picture this... our first date. Where?</h1>
-             <p>Pick the spot where I get to stare at you across the table: ✨</p>
+             <h1>Where should I take you?</h1>
+             <p>Pick our vibe for the perfect first date: ✨</p>
             
             <div className="options-grid">
               {locations.map((loc, idx) => (
@@ -672,8 +672,8 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.FoodFork />
             </div>
-             <h1>What should we feast on before I steal a kiss? 😏</h1>
-             <p>Good food + good company = the perfect recipe. What are you craving? 😋</p>
+             <h1>What are we eating? 😏</h1>
+             <p>Pick something delicious for our date: 😋</p>
             
             <div className="options-grid">
               {foods.map((food, idx) => (
@@ -751,8 +751,8 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
               <Icons.Calendar />
             </div>
-             <h1>I'm counting the seconds already... when?</h1>
-             <p>Circle a date and a time so I can start planning the most unforgettable evening: 🗓️</p>
+             <h1>When's our date?</h1>
+             <p>Pick the perfect day and time: 🗓️</p>
 
             {/* Custom Calendar */}
             <div className="custom-calendar">
@@ -827,34 +827,34 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
               <Icons.SuccessBadge />
             </div>
-             <h1>It's Official — We're Going on a Date! ❤️</h1>
+             <h1>It's a Date! ❤️</h1>
              <p style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '1.5rem' }}>
                {senderName 
-                 ? `${formData.name}, ${senderName} is already planning what to wear! See you soon ✨`
-                 : `I'm already planning what to wear, ${formData.name}! This is going to be magical ✨`
+                 ? `Can't wait to see you, ${formData.name}! ✨`
+                 : `I can't wait to see you, ${formData.name}! ✨`
                }
              </p>
              <p style={{ fontSize: '1.5rem', lineHeight: '1.8' }}>
-               Here's our dream plan:
+               Our plan:
                <br />
-               📍 Destination: <strong>{formData.location}</strong>
+               📍 <strong>{formData.location}</strong>
                <br />
-               🍔 Menu: <strong>{formData.food}</strong>
+               🍔 <strong>{formData.food}</strong>
                <br />
-               ⏰ Perfect Moment: <strong>{formData.date}</strong> during <strong>{formData.time}</strong>
+               ⏰ <strong>{formData.date}</strong> at <strong>{formData.time}</strong>
              </p>
               <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
                 <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', fontStyle: 'italic', color: 'var(--text-muted)' }}>
                   {senderName 
-                    ? `${senderName} is counting stars until that moment with you, ${formData.name}. Can't come soon enough! 🥰`
-                    : `I'm counting stars until I get to see you, ${formData.name}. This is going to be unforgettable 🥰`
+                    ? `See you soon! 🥰`
+                    : `See you soon, beautiful! 🥰`
                   }
                 </p>
                 <a 
                   href={`${window.location.origin}/?mode=create`}
                   style={{ display: 'inline-block', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline', fontSize: 'clamp(0.85rem, 2.5vw, 1rem)' }}
                 >
-                  Create your own love story — click here 💌
+                  Create your own 💌
                 </a>
               </div>
           </motion.div>
