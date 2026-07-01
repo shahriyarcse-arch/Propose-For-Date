@@ -495,6 +495,38 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
         {isMuted ? <Icons.VolumeMute /> : <Icons.VolumeHigh />}
       </motion.button>
 
+      {/* Create Your Own Proposal Link - top left */}
+      {!senderName && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onOpenGenerator}
+          style={{
+            position: 'absolute',
+            top: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+            left: 'clamp(0.8rem, 2.5vw, 1.5rem)',
+            background: 'rgba(255,255,255,0.7)',
+            border: '1.5px solid rgba(255,255,255,0.5)',
+            borderRadius: '50px',
+            padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 3vw, 1.4rem)',
+            fontSize: 'clamp(0.7rem, 2vw, 0.85rem)',
+            fontWeight: 600,
+            color: 'var(--text-muted)',
+            cursor: 'pointer',
+            fontFamily: 'var(--font)',
+            zIndex: 100,
+            transition: 'all 0.2s ease',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.03)'
+          }}
+        >
+          Create Your Own 💌
+        </motion.button>
+      )}
+
       {/* Floating Hearts Background */}
       <div className="hearts-container">
         {hearts.map(h => (
@@ -562,34 +594,7 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
                 <Icons.ShieldAlert /> No
               </motion.button>
             </div>
-            {!senderName && (
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={onOpenGenerator}
-                style={{
-                  position: 'absolute',
-                  top: 'clamp(0.8rem, 3vw, 1.5rem)',
-                  left: 'clamp(0.8rem, 3vw, 1.5rem)',
-                  background: 'rgba(255,71,126,0.08)',
-                  border: 'none',
-                  borderRadius: '50px',
-                  padding: 'clamp(0.4rem, 2vw, 0.7rem) clamp(1rem, 4vw, 2rem)',
-                  fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
-                  fontWeight: 700,
-                  color: 'var(--primary)',
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font)',
-                  transition: 'all 0.2s ease',
-                  zIndex: 20
-                }}
-              >
-                Create Your Own 💌
-              </motion.button>
-            )}
+
           </motion.div>
         )}
 
