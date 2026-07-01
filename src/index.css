@@ -322,8 +322,8 @@ p {
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 16px 36px; /* Increased for a more premium, larger feel */
-  font-size: 1.15rem; /* Increased font size */
+  padding: clamp(12px, 2.5vw, 18px) clamp(24px, 5vw, 40px);
+  font-size: clamp(1rem, 2.8vw, 1.2rem);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -365,8 +365,8 @@ p {
 }
 
 .btn-yes, .btn-no {
-  padding: 16px 36px; /* Increased for a more premium, larger feel */
-  font-size: 1.15rem; /* Increased font size */
+  padding: clamp(10px, 2.5vw, 16px) clamp(18px, 4vw, 36px);
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
   border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
@@ -417,9 +417,9 @@ p {
   background: rgba(255, 71, 126, 0.08);
   border: none;
   border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  font-size: 1.5rem;
+  width: clamp(36px, 6vw, 42px);
+  height: clamp(36px, 6vw, 42px);
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   font-weight: 700;
   color: var(--primary);
   cursor: pointer;
@@ -629,12 +629,12 @@ tr:hover {
   background: #ff7675;
   color: white;
   border: none;
-  padding: 0.5rem 1.1rem;
+  padding: clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 2vw, 1.2rem);
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
 }
 
 .delete-btn:hover {
@@ -695,17 +695,34 @@ tr:hover {
     grid-template-columns: 1fr;
   }
   .btn-container {
-    flex-direction: row; /* Force side-by-side alignment */
-    gap: 1rem;
+    flex-direction: row;
+    gap: 0.8rem;
     flex-wrap: nowrap;
     width: 100%;
   }
   .btn-yes, .btn-no {
     flex: 1;
     max-width: 150px;
-    padding: 11px 22px;
-    font-size: 0.95rem;
+    padding: 11px 18px;
+    font-size: 0.9rem;
     text-align: center;
+  }
+  th, td {
+    padding: 0.8rem 0.6rem;
+    font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  }
+  .dashboard-container {
+    padding: clamp(1.2rem, 4vw, 2rem) clamp(0.8rem, 3vw, 1.5rem);
+  }
+  .flow-wrapper {
+    padding: 1.5rem 0.75rem;
+  }
+  .dashboard-wrapper {
+    padding: 1.5rem 0.75rem;
+  }
+  .glass-container {
+    width: 95%;
+    padding: clamp(1.2rem, 4vw, 2rem) clamp(0.8rem, 3vw, 1.5rem);
   }
 }
 
@@ -715,7 +732,7 @@ tr:hover {
   bottom: 1.2rem;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.85rem;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
   color: var(--text-muted);
   opacity: 0.65;
   font-weight: 600;
@@ -739,13 +756,13 @@ tr:hover {
 /* Floating Sound Toggle Button */
 .sound-toggle-btn {
   position: absolute;
-  top: clamp(1rem, 3vw, 1.5rem);
-  right: clamp(1rem, 3vw, 1.5rem);
+  top: clamp(0.8rem, 2.5vw, 1.5rem);
+  right: clamp(0.8rem, 2.5vw, 1.5rem);
   background: rgba(255, 71, 126, 0.08);
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: clamp(36px, 6vw, 44px);
+  height: clamp(36px, 6vw, 44px);
   display: flex;
   align-items: center;
   justify-content: center;

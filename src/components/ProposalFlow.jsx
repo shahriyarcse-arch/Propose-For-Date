@@ -571,12 +571,12 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
                 whileTap={{ scale: 0.97 }}
                 onClick={onOpenGenerator}
                 style={{
-                  marginTop: '2rem',
+                  marginTop: '1.5rem',
                   background: 'none',
                   border: '1.5px dashed rgba(255,71,126,0.3)',
                   borderRadius: '50px',
-                  padding: '0.6rem 1.5rem',
-                  fontSize: '0.9rem',
+                  padding: 'clamp(0.4rem, 2vw, 0.7rem) clamp(1rem, 4vw, 2rem)',
+                  fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
                   fontWeight: 600,
                   color: 'var(--text-muted)',
                   cursor: 'pointer',
@@ -835,20 +835,20 @@ export default function ProposalFlow({ customParams = {}, onOpenGenerator }) {
                <br />
                ⏰ Perfect Moment: <strong>{formData.date}</strong> during <strong>{formData.time}</strong>
              </p>
-             <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
-               <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>
-                 {senderName 
-                   ? `${senderName}'s little plan is locked into the heart (and database). Can't wait! 🥰`
-                   : "Our little plan is locked into my heart (and database). Can't wait! 🥰"
-                 }
-               </p>
-               <a 
-                 href={`${window.location.origin}/?mode=create`}
-                 style={{ display: 'inline-block', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline', fontSize: '1rem' }}
-               >
-                 Want to create your own proposal? Click here! 💌
-               </a>
-             </div>
+              <div style={{ borderTop: '2px solid var(--card-border)', paddingTop: '2.5rem', marginTop: '2.5rem' }}>
+                <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', fontStyle: 'italic', color: 'var(--text-muted)' }}>
+                  {senderName 
+                    ? `${senderName}'s little plan is locked into the heart (and database). Can't wait! 🥰`
+                    : "Our little plan is locked into my heart (and database). Can't wait! 🥰"
+                  }
+                </p>
+                <a 
+                  href={`${window.location.origin}/?mode=create`}
+                  style={{ display: 'inline-block', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline', fontSize: 'clamp(0.85rem, 2.5vw, 1rem)' }}
+                >
+                  Want to create your own proposal? Click here! 💌
+                </a>
+              </div>
           </motion.div>
         )}
 

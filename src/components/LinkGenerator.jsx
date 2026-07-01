@@ -109,17 +109,17 @@ export default function LinkGenerator({ onBack }) {
             </div>
 
             {/* Link type toggle */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '2rem', background: 'rgba(255,255,255,0.5)', padding: '0.8rem 1.2rem', borderRadius: '16px', border: '1.5px solid rgba(255,255,255,0.7)' }}>
-              <span style={{ fontWeight: 600, color: 'var(--text)', fontSize: '0.95rem' }}>Link type:</span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', marginBottom: '2rem', background: 'rgba(255,255,255,0.5)', padding: 'clamp(0.5rem, 2vw, 0.8rem) clamp(0.8rem, 3vw, 1.2rem)', borderRadius: '16px', border: '1.5px solid rgba(255,255,255,0.7)' }}>
+              <span style={{ fontWeight: 600, color: 'var(--text)', fontSize: 'clamp(0.85rem, 2.5vw, 0.95rem)' }}>Link type:</span>
               <button
                 type="button"
                 onClick={() => setUseShortLink(true)}
                 style={{
-                  padding: '0.5rem 1.2rem',
+                  padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 3vw, 1.4rem)',
                   borderRadius: '50px',
                   border: 'none',
                   fontWeight: 700,
-                  fontSize: '0.9rem',
+                  fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
                   cursor: 'pointer',
                   background: useShortLink ? 'linear-gradient(135deg, var(--accent), var(--primary))' : 'rgba(255,255,255,0.7)',
                   color: useShortLink ? 'white' : 'var(--text-muted)',
@@ -132,11 +132,11 @@ export default function LinkGenerator({ onBack }) {
                 type="button"
                 onClick={() => setUseShortLink(false)}
                 style={{
-                  padding: '0.5rem 1.2rem',
+                  padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 3vw, 1.4rem)',
                   borderRadius: '50px',
                   border: 'none',
                   fontWeight: 700,
-                  fontSize: '0.9rem',
+                  fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
                   cursor: 'pointer',
                   background: !useShortLink ? 'linear-gradient(135deg, var(--accent), var(--primary))' : 'rgba(255,255,255,0.7)',
                   color: !useShortLink ? 'white' : 'var(--text-muted)',
@@ -184,7 +184,7 @@ export default function LinkGenerator({ onBack }) {
               readOnly 
               className="input-field"
               value={generatedLink}
-              style={{ height: '80px', resize: 'none', padding: '1rem', fontSize: '0.95rem', fontFamily: 'monospace', marginBottom: '1.5rem' }}
+              style={{ height: 'clamp(60px, 10vw, 80px)', resize: 'none', padding: 'clamp(0.6rem, 2vw, 1rem)', fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', fontFamily: 'monospace', marginBottom: '1.5rem' }}
               onClick={(e) => e.target.select()}
             />
 

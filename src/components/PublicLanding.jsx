@@ -66,7 +66,7 @@ export default function PublicLanding({ onEnterGenerator }) {
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.95 }}
           className="btn-primary"
-          style={{ padding: '1.2rem 3rem', fontSize: '1.3rem', marginBottom: '3rem' }}
+          style={{ marginBottom: '3rem' }}
           onClick={onEnterGenerator}
         >
           Create Your Proposal Link ✨

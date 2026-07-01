@@ -116,7 +116,6 @@ export default function Dashboard({ onBack }) {
                   whileTap={{ scale: 0.95 }}
                   type="button" 
                   className="btn-no" 
-                  style={{ padding: '1.2rem 3rem' }} 
                   onClick={onBack}
                 >
                   Back
@@ -126,7 +125,6 @@ export default function Dashboard({ onBack }) {
                   whileTap={{ scale: 0.95 }}
                   type="submit" 
                   className="btn-primary"
-                  style={{ padding: '1.2rem 3rem' }}
                 >
                   Unlock
                 </motion.button>
@@ -145,7 +143,6 @@ export default function Dashboard({ onBack }) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-no" 
-                  style={{ padding: '1rem 2.2rem', fontSize: '1.2rem' }} 
                   onClick={fetchResponses}
                 >
                   <Icons.Refresh /> Refresh
@@ -154,7 +151,6 @@ export default function Dashboard({ onBack }) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-primary" 
-                  style={{ padding: '1rem 2.2rem', fontSize: '1.2rem' }} 
                   onClick={onBack}
                 >
                   <Icons.Home /> Home
